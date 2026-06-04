@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Circle } from "react-native-svg";
 
@@ -25,7 +24,7 @@ export default function GoalsScreen() {
         <Text style={styles.title}>Savings Goal</Text>
         <Text style={styles.subtitle}>Turn your goal into a clear monthly plan.</Text>
 
-        <LinearGradient colors={["#111827", "#172554", "#4C1D95"]} style={styles.heroCard}>
+        <View style={styles.heroCard}>
           <View style={styles.heroTop}>
             <View>
               <Text style={styles.heroLabel}>Active goal</Text>
@@ -33,13 +32,12 @@ export default function GoalsScreen() {
             </View>
 
             <View style={styles.iconCircle}>
-              <Ionicons name="phone-portrait-outline" size={24} color="#DDE7FF" />
+              <Ionicons name="phone-portrait-outline" size={23} color={colors.accent} />
             </View>
           </View>
 
           <View style={styles.progressArea}>
             <GoalProgress />
-
             <View style={styles.progressCenter}>
               <Text style={styles.progressPercent}>{progress}%</Text>
               <Text style={styles.progressLabel}>completed</Text>
@@ -47,19 +45,11 @@ export default function GoalsScreen() {
           </View>
 
           <View style={styles.amountPanel}>
-            <View>
-              <Text style={styles.panelLabel}>Saved</Text>
-              <Text style={styles.panelValue}>{formatMoney(currentSaving)}</Text>
-            </View>
-
+            <Metric label="Saved" value={formatMoney(currentSaving)} />
             <View style={styles.panelDivider} />
-
-            <View>
-              <Text style={styles.panelLabel}>Target</Text>
-              <Text style={styles.panelValue}>{formatMoney(targetAmount)}</Text>
-            </View>
+            <Metric label="Target" value={formatMoney(targetAmount)} />
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.grid}>
           <InfoCard icon="calendar-outline" label="Estimated time" value={`${monthsLeft} months`} />
@@ -79,7 +69,7 @@ export default function GoalsScreen() {
 
         <View style={styles.aiPanel}>
           <View style={styles.aiIcon}>
-            <Ionicons name="sparkles-outline" size={22} color={colors.cyan} />
+            <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
           </View>
 
           <View style={{ flex: 1 }}>
@@ -88,8 +78,6 @@ export default function GoalsScreen() {
               Saving {formatMoney(monthlySaving)} monthly keeps this goal on track. You can reach it in about {monthsLeft} months.
             </Text>
           </View>
-
-          <Ionicons name="chevron-forward" size={20} color={colors.muted} />
         </View>
       </ScrollView>
     </ScreenBackground>
@@ -97,57 +85,51 @@ export default function GoalsScreen() {
 }
 
 function GoalProgress() {
-  const size = 210;
-  const strokeWidth = 24;
+  const size = 184;
+  const strokeWidth = 20;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (progress / 100) * circumference;
 
   return (
-    <View style={styles.progressShadow}>
-      <Svg width={size} height={size}>
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="rgba(255,255,255,0.12)"
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
+    <Svg width={size} height={size}>
+      <Circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth={strokeWidth}
+        fill="none"
+      />
 
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke={colors.cyan}
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeLinecap="round"
-          strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={offset}
-          rotation="-90"
-          originX={size / 2}
-          originY={size / 2}
-        />
+      <Circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        stroke={colors.accent}
+        strokeWidth={strokeWidth}
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={`${circumference} ${circumference}`}
+        strokeDashoffset={offset}
+        rotation="-90"
+        originX={size / 2}
+        originY={size / 2}
+      />
+    </Svg>
+  );
+}
 
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius - 19}
-          stroke="rgba(168,85,247,0.25)"
-          strokeWidth={2}
-          fill="none"
-        />
-      </Svg>
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.metric}>
+      <Text style={styles.panelLabel}>{label}</Text>
+      <Text style={styles.panelValue}>{value}</Text>
     </View>
   );
 }
 
-function InfoCard({
-  icon,
-  label,
-  value,
-}: {
+function InfoCard({ icon, label, value }: {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   value: string;
@@ -155,21 +137,15 @@ function InfoCard({
   return (
     <View style={styles.infoCard}>
       <View style={styles.infoIcon}>
-        <Ionicons name={icon} size={21} color={colors.cyan} />
+        <Ionicons name={icon} size={20} color={colors.accent} />
       </View>
-
       <Text style={styles.infoLabel}>{label}</Text>
       <Text style={styles.infoValue}>{value}</Text>
     </View>
   );
 }
 
-function Milestone({
-  label,
-  value,
-  active = false,
-  last = false,
-}: {
+function Milestone({ label, value, active = false, last = false }: {
   label: string;
   value: string;
   active?: boolean;
@@ -191,275 +167,122 @@ function Milestone({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 22,
-    paddingTop: 58,
-    paddingBottom: 130,
-  },
-
-  kicker: {
-    color: colors.cyan,
-    fontSize: 14,
-    fontWeight: "900",
-    marginBottom: 8,
-  },
-
-  title: {
-    color: colors.text,
-    fontSize: 38,
-    fontWeight: "900",
-    letterSpacing: -1.5,
-  },
-
-  subtitle: {
-    color: colors.muted,
-    marginTop: 8,
-    marginBottom: 24,
-    lineHeight: 22,
-  },
-
+  container: { padding: 22, paddingTop: 58, paddingBottom: 130 },
+  kicker: { color: colors.accent, fontSize: 13, fontWeight: "800", marginBottom: 8 },
+  title: { color: colors.text, fontSize: 34, fontWeight: "800", letterSpacing: -1.1 },
+  subtitle: { color: colors.muted, marginTop: 8, marginBottom: 22, lineHeight: 22, fontWeight: "600" },
   heroCard: {
-    borderRadius: 34,
+    backgroundColor: colors.surfaceStrong,
+    borderRadius: 28,
     padding: 22,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "rgba(147,197,253,0.18)",
+    borderColor: colors.borderStrong,
   },
-
-  heroTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  heroLabel: {
-    color: "#CBD5E1",
-    fontWeight: "800",
-    marginBottom: 8,
-  },
-
-  goalName: {
-    color: colors.text,
-    fontSize: 32,
-    fontWeight: "900",
-    letterSpacing: -0.8,
-  },
-
+  heroTop: { flexDirection: "row", justifyContent: "space-between" },
+  heroLabel: { color: colors.muted, fontWeight: "700", marginBottom: 8 },
+  goalName: { color: colors.text, fontSize: 30, fontWeight: "800", letterSpacing: -0.8 },
   iconCircle: {
-    width: 54,
-    height: 54,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.12)",
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
-
   progressArea: {
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 22,
+    marginTop: 20,
     marginBottom: 18,
   },
-
-  progressShadow: {
-    shadowColor: colors.cyan,
-    shadowOpacity: 0.25,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 8 },
-  },
-
-  progressCenter: {
-    position: "absolute",
-    alignItems: "center",
-  },
-
-  progressPercent: {
-    color: colors.text,
-    fontSize: 42,
-    fontWeight: "900",
-    letterSpacing: -1.4,
-  },
-
-  progressLabel: {
-    color: "#CBD5E1",
-    fontSize: 13,
-    fontWeight: "800",
-    marginTop: 2,
-  },
-
+  progressCenter: { position: "absolute", alignItems: "center" },
+  progressPercent: { color: colors.text, fontSize: 38, fontWeight: "800", letterSpacing: -1.2 },
+  progressLabel: { color: colors.muted, fontSize: 13, fontWeight: "600", marginTop: 2 },
   amountPanel: {
-    backgroundColor: "rgba(3,7,18,0.25)",
+    backgroundColor: "rgba(2,6,23,0.35)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    borderRadius: 22,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 20,
     padding: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
   },
-
-  panelLabel: {
-    color: "#8EA4C8",
-    fontSize: 12,
-    fontWeight: "900",
-    marginBottom: 5,
-  },
-
-  panelValue: {
-    color: colors.text,
-    fontSize: 15,
-    fontWeight: "900",
-  },
-
-  panelDivider: {
-    width: 1,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    marginHorizontal: 10,
-  },
-
-  grid: {
-    flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
-  },
-
+  metric: { flex: 1 },
+  panelLabel: { color: colors.faint, fontSize: 12, fontWeight: "700", marginBottom: 5 },
+  panelValue: { color: colors.text, fontSize: 14, fontWeight: "800" },
+  panelDivider: { width: 1, backgroundColor: "rgba(255,255,255,0.08)", marginHorizontal: 12 },
+  grid: { flexDirection: "row", gap: 12, marginBottom: 16 },
   infoCard: {
     flex: 1,
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 25,
+    borderRadius: 22,
     padding: 16,
   },
-
   infoIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 15,
-    backgroundColor: "rgba(56,189,248,0.12)",
+    width: 40,
+    height: 40,
+    borderRadius: 14,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 12,
   },
-
-  infoLabel: {
-    color: colors.muted,
-    fontSize: 12,
-    fontWeight: "800",
-  },
-
-  infoValue: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: "900",
-    marginTop: 6,
-  },
-
+  infoLabel: { color: colors.muted, fontSize: 12, fontWeight: "700" },
+  infoValue: { color: colors.text, fontSize: 15, fontWeight: "800", marginTop: 6 },
   milestoneCard: {
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 28,
+    borderRadius: 24,
     padding: 18,
     marginBottom: 16,
   },
-
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 18,
   },
-
-  sectionTitle: {
-    color: colors.text,
-    fontSize: 18,
-    fontWeight: "900",
-  },
-
-  sectionBadge: {
-    color: colors.cyan,
-    fontSize: 12,
-    fontWeight: "900",
-  },
-
-  milestone: {
-    flexDirection: "row",
-    gap: 13,
-  },
-
-  timeline: {
-    alignItems: "center",
-  },
-
+  sectionTitle: { color: colors.text, fontSize: 18, fontWeight: "800" },
+  sectionBadge: { color: colors.accent, fontSize: 12, fontWeight: "700" },
+  milestone: { flexDirection: "row", gap: 13 },
+  timeline: { alignItems: "center" },
   milestoneDot: {
-    width: 14,
-    height: 14,
+    width: 13,
+    height: 13,
     borderRadius: 99,
     backgroundColor: "rgba(148,163,184,0.35)",
-    borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.12)",
   },
-
-  milestoneDotActive: {
-    backgroundColor: colors.cyan,
-    borderColor: "rgba(56,189,248,0.45)",
-  },
-
+  milestoneDotActive: { backgroundColor: colors.accent },
   timelineLine: {
     width: 2,
     height: 36,
     backgroundColor: "rgba(148,163,184,0.18)",
     marginVertical: 4,
   },
-
-  milestoneContent: {
-    flex: 1,
-    paddingBottom: 16,
-  },
-
-  milestoneLabel: {
-    color: colors.soft,
-    fontWeight: "800",
-    fontSize: 13,
-  },
-
-  milestoneValue: {
-    color: colors.text,
-    fontWeight: "900",
-    marginTop: 3,
-  },
-
+  milestoneContent: { flex: 1, paddingBottom: 16 },
+  milestoneLabel: { color: colors.soft, fontWeight: "700", fontSize: 13 },
+  milestoneValue: { color: colors.text, fontWeight: "800", marginTop: 3 },
   aiPanel: {
-    backgroundColor: "rgba(14,165,233,0.09)",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.22)",
-    borderRadius: 28,
-    padding: 17,
+    borderColor: colors.border,
+    borderRadius: 24,
+    padding: 16,
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
+    gap: 13,
   },
-
   aiIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 17,
-    backgroundColor: "rgba(56,189,248,0.12)",
+    width: 42,
+    height: 42,
+    borderRadius: 15,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
-
-  aiTitle: {
-    color: colors.text,
-    fontWeight: "900",
-    fontSize: 16,
-  },
-
-  aiText: {
-    color: colors.soft,
-    lineHeight: 20,
-    marginTop: 5,
-    fontSize: 13,
-  },
+  aiTitle: { color: colors.text, fontWeight: "800", fontSize: 15 },
+  aiText: { color: colors.muted, lineHeight: 20, marginTop: 5, fontSize: 13, fontWeight: "600" },
 });

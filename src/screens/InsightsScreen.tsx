@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Circle } from "react-native-svg";
 
@@ -14,28 +13,24 @@ const insights = [
     icon: "alert-circle-outline",
     title: "Shopping increased",
     text: "Your shopping expenses are 18% higher than last month.",
-    color: "#FB7185",
   },
   {
     type: "Saving",
     icon: "wallet-outline",
     title: "Saving opportunity",
     text: "Reducing food spending by 10% could save around 850 TL this month.",
-    color: "#38BDF8",
   },
   {
     type: "Goal",
     icon: "flag-outline",
     title: "Goal is on track",
     text: "Your current saving pace keeps your phone goal stable.",
-    color: "#A855F7",
   },
   {
     type: "Habit",
     icon: "repeat-outline",
     title: "Small purchases add up",
     text: "Coffee and snacks are creating a visible impact on your monthly budget.",
-    color: "#6366F1",
   },
 ];
 
@@ -49,7 +44,7 @@ export default function InsightsScreen() {
           Understand your spending patterns and discover better financial decisions.
         </Text>
 
-        <LinearGradient colors={["#111827", "#172554", "#34216D"]} style={styles.healthCard}>
+        <View style={styles.healthCard}>
           <View style={styles.healthTop}>
             <View style={{ flex: 1 }}>
               <Text style={styles.healthLabel}>Monthly health score</Text>
@@ -73,7 +68,7 @@ export default function InsightsScreen() {
             <View style={styles.metricDivider} />
             <Metric label="Savings trend" value="Stable" />
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Today’s Insights</Text>
@@ -82,26 +77,18 @@ export default function InsightsScreen() {
 
         {insights.map((item) => (
           <View style={styles.card} key={item.title}>
-            <LinearGradient
-              colors={[`${item.color}28`, "rgba(255,255,255,0.035)"]}
-              style={styles.cardGlow}
-            />
-
-            <View style={[styles.iconBox, { backgroundColor: `${item.color}20` }]}>
+            <View style={styles.iconBox}>
               <Ionicons
                 name={item.icon as keyof typeof Ionicons.glyphMap}
-                size={22}
-                color={item.color}
+                size={20}
+                color={colors.accent}
               />
             </View>
 
             <View style={{ flex: 1 }}>
               <View style={styles.cardTop}>
                 <Text style={styles.cardTitle}>{item.title}</Text>
-
-                <View style={[styles.badgeBox, { borderColor: `${item.color}55` }]}>
-                  <Text style={[styles.badge, { color: item.color }]}>{item.type}</Text>
-                </View>
+                <Text style={styles.badge}>{item.type}</Text>
               </View>
 
               <Text style={styles.cardText}>{item.text}</Text>
@@ -126,7 +113,7 @@ function ScoreCircle() {
         cx={size / 2}
         cy={size / 2}
         r={radius}
-        stroke="rgba(255,255,255,0.13)"
+        stroke="rgba(255,255,255,0.08)"
         strokeWidth={strokeWidth}
         fill="none"
       />
@@ -135,7 +122,7 @@ function ScoreCircle() {
         cx={size / 2}
         cy={size / 2}
         r={radius}
-        stroke={colors.cyan}
+        stroke={colors.accent}
         strokeWidth={strokeWidth}
         fill="none"
         strokeLinecap="round"
@@ -166,32 +153,34 @@ const styles = StyleSheet.create({
   },
 
   kicker: {
-    color: colors.cyan,
-    fontSize: 14,
-    fontWeight: "900",
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: "800",
     marginBottom: 8,
   },
 
   title: {
     color: colors.text,
-    fontSize: 38,
-    fontWeight: "900",
-    letterSpacing: -1.5,
+    fontSize: 34,
+    fontWeight: "800",
+    letterSpacing: -1.1,
   },
 
   subtitle: {
     color: colors.muted,
     marginTop: 8,
-    marginBottom: 24,
+    marginBottom: 22,
     lineHeight: 22,
+    fontWeight: "600",
   },
 
   healthCard: {
-    borderRadius: 34,
+    backgroundColor: colors.surfaceStrong,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
+    borderRadius: 28,
     padding: 22,
     marginBottom: 24,
-    borderWidth: 1,
-    borderColor: "rgba(147,197,253,0.18)",
   },
 
   healthTop: {
@@ -201,26 +190,26 @@ const styles = StyleSheet.create({
   },
 
   healthLabel: {
-    color: "#CBD5E1",
-    fontWeight: "900",
+    color: colors.muted,
+    fontWeight: "700",
     fontSize: 13,
     marginBottom: 8,
   },
 
   healthTitle: {
     color: colors.text,
-    fontWeight: "900",
-    fontSize: 22,
+    fontWeight: "800",
+    fontSize: 21,
     letterSpacing: -0.5,
-    lineHeight: 27,
+    lineHeight: 26,
   },
 
   healthText: {
-    color: colors.soft,
+    color: colors.muted,
     marginTop: 9,
     lineHeight: 20,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
   scoreArea: {
@@ -238,23 +227,23 @@ const styles = StyleSheet.create({
   scoreValue: {
     color: colors.text,
     fontSize: 25,
-    fontWeight: "900",
+    fontWeight: "800",
     letterSpacing: -0.5,
   },
 
   scoreLabel: {
-    color: "#CBD5E1",
+    color: colors.muted,
     fontSize: 10,
-    fontWeight: "900",
+    fontWeight: "700",
     marginTop: -1,
   },
 
   healthMetrics: {
     marginTop: 20,
-    backgroundColor: "rgba(3,7,18,0.25)",
+    backgroundColor: "rgba(2,6,23,0.35)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    borderRadius: 22,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 20,
     padding: 15,
     flexDirection: "row",
   },
@@ -264,21 +253,21 @@ const styles = StyleSheet.create({
   },
 
   metricLabel: {
-    color: "#8EA4C8",
+    color: colors.faint,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
     marginBottom: 5,
   },
 
   metricValue: {
     color: colors.text,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "800",
   },
 
   metricDivider: {
     width: 1,
-    backgroundColor: "rgba(255,255,255,0.10)",
+    backgroundColor: "rgba(255,255,255,0.08)",
     marginHorizontal: 12,
   },
 
@@ -291,39 +280,32 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     color: colors.text,
-    fontSize: 20,
-    fontWeight: "900",
-    letterSpacing: -0.5,
+    fontSize: 19,
+    fontWeight: "800",
   },
 
   sectionHint: {
-    color: colors.cyan,
+    color: colors.accent,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 
   card: {
-    position: "relative",
-    overflow: "hidden",
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 26,
-    padding: 16,
-    marginBottom: 13,
+    borderRadius: 22,
+    padding: 15,
+    marginBottom: 11,
     flexDirection: "row",
-    gap: 14,
-  },
-
-  cardGlow: {
-    ...StyleSheet.absoluteFillObject,
-    opacity: 0.55,
+    gap: 13,
   },
 
   iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 17,
+    width: 42,
+    height: 42,
+    borderRadius: 15,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -337,29 +319,22 @@ const styles = StyleSheet.create({
 
   cardTitle: {
     color: colors.text,
-    fontWeight: "900",
+    fontWeight: "700",
     fontSize: 15,
     flex: 1,
   },
 
-  badgeBox: {
-    backgroundColor: "rgba(3,7,18,0.24)",
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 999,
-  },
-
   badge: {
-    fontSize: 10,
-    fontWeight: "900",
+    color: colors.accent,
+    fontSize: 11,
+    fontWeight: "700",
   },
 
   cardText: {
-    color: colors.soft,
-    marginTop: 7,
+    color: colors.muted,
+    marginTop: 6,
     lineHeight: 20,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 });

@@ -9,7 +9,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenBackground from "../components/ScreenBackground";
@@ -89,37 +88,14 @@ export default function AICoachScreen() {
               <Text style={styles.title}>AI Coach</Text>
             </View>
 
-            <LinearGradient colors={[colors.cyan, colors.blue]} style={styles.headerIcon}>
-              <Ionicons name="sparkles" size={22} color="#FFFFFF" />
-            </LinearGradient>
+            <View style={styles.headerIcon}>
+              <Ionicons name="sparkles-outline" size={21} color={colors.accent} />
+            </View>
           </View>
 
-          <LinearGradient
-            colors={["rgba(255,255,255,0.095)", "rgba(255,255,255,0.035)"]}
-            style={styles.statusCard}
-          >
-            <View style={styles.statusTop}>
-              <View style={{ flex: 1 }}>
-                <Text style={styles.statusLabel}>Smart summary</Text>
-                <Text style={styles.statusTitle}>Spending pattern detected</Text>
-              </View>
-
-              <View style={styles.liveBadge}>
-                <View style={styles.liveDot} />
-                <Text style={styles.liveText}>Ready</Text>
-              </View>
-            </View>
-
-            <Text style={styles.statusText}>
-              Shopping and food are trending up this month. Ask me how to optimize your budget.
-            </Text>
-
-            <View style={styles.miniStatsRow}>
-              <MiniStat label="Spent" value="12,450 TL" />
-              <View style={styles.statDivider} />
-              <MiniStat label="Saved" value="7,500 TL" />
-            </View>
-          </LinearGradient>
+          <Text style={styles.subtitle}>
+            Ask questions and get instant guidance based on your financial habits.
+          </Text>
 
           <View style={styles.promptRow}>
             {quickPrompts.map((item) => (
@@ -149,7 +125,7 @@ export default function AICoachScreen() {
               >
                 {item.sender === "ai" && (
                   <View style={styles.aiAvatar}>
-                    <Ionicons name="sparkles-outline" size={17} color={colors.cyan} />
+                    <Ionicons name="sparkles-outline" size={16} color={colors.accent} />
                   </View>
                 )}
 
@@ -177,31 +153,22 @@ export default function AICoachScreen() {
               <TextInput
                 style={styles.input}
                 placeholder="Ask anything about your money..."
-                placeholderTextColor="#64748B"
+                placeholderTextColor={colors.faint}
                 value={input}
                 onChangeText={setInput}
                 multiline
               />
 
               <TouchableOpacity activeOpacity={0.85} onPress={() => sendMessage(input)}>
-                <LinearGradient colors={[colors.cyan, colors.blue]} style={styles.sendButton}>
-                  <Ionicons name="send" size={18} color="#FFFFFF" />
-                </LinearGradient>
+                <View style={styles.sendButton}>
+                  <Ionicons name="send" size={17} color={colors.text} />
+                </View>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </KeyboardAvoidingView>
     </ScreenBackground>
-  );
-}
-
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.miniStat}>
-      <Text style={styles.miniStatLabel}>{label}</Text>
-      <Text style={styles.miniStatValue}>{value}</Text>
-    </View>
   );
 }
 
@@ -224,143 +191,57 @@ const styles = StyleSheet.create({
   },
 
   kicker: {
-    color: colors.cyan,
-    fontSize: 14,
-    fontWeight: "900",
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: "800",
     marginBottom: 8,
   },
 
   title: {
     color: colors.text,
-    fontSize: 38,
-    fontWeight: "900",
-    letterSpacing: -1.5,
+    fontSize: 34,
+    fontWeight: "800",
+    letterSpacing: -1.1,
   },
 
   headerIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 19,
+    width: 48,
+    height: 48,
+    borderRadius: 17,
+    backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: "rgba(56,189,248,0.22)",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  statusCard: {
-    marginTop: 16,
-    borderRadius: 28,
-    padding: 17,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-
-  statusTop: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 12,
-  },
-
-  statusLabel: {
+  subtitle: {
     color: colors.muted,
-    fontSize: 12,
-    fontWeight: "900",
-    marginBottom: 6,
-  },
-
-  statusTitle: {
-    color: colors.text,
-    fontSize: 16,
-    fontWeight: "900",
-    lineHeight: 21,
-  },
-
-  liveBadge: {
-    backgroundColor: "rgba(34,197,94,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.30)",
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
-
-  liveDot: {
-    width: 7,
-    height: 7,
-    borderRadius: 99,
-    backgroundColor: colors.green,
-  },
-
-  liveText: {
-    color: colors.green,
-    fontSize: 11,
-    fontWeight: "900",
-  },
-
-  statusText: {
-    color: colors.soft,
-    fontSize: 13,
-    fontWeight: "700",
-    lineHeight: 20,
-    marginTop: 11,
-  },
-
-  miniStatsRow: {
-    marginTop: 14,
-    backgroundColor: "rgba(3,7,18,0.28)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    borderRadius: 20,
-    padding: 13,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  miniStat: {
-    flex: 1,
-  },
-
-  miniStatLabel: {
-    color: "#7C8BA5",
-    fontSize: 11,
-    fontWeight: "900",
-    marginBottom: 5,
-  },
-
-  miniStatValue: {
-    color: colors.text,
-    fontSize: 14,
-    fontWeight: "900",
-  },
-
-  statDivider: {
-    width: 1,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    marginHorizontal: 10,
+    marginTop: 8,
+    marginBottom: 16,
+    lineHeight: 22,
+    fontWeight: "600",
   },
 
   promptRow: {
     flexDirection: "row",
     gap: 8,
-    marginTop: 14,
-    marginBottom: 12,
+    marginBottom: 14,
   },
 
   promptChip: {
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    paddingHorizontal: 11,
+    paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 999,
   },
 
   promptText: {
     color: colors.soft,
-    fontSize: 11,
-    fontWeight: "900",
+    fontSize: 12,
+    fontWeight: "700",
   },
 
   chatList: {
@@ -387,16 +268,14 @@ const styles = StyleSheet.create({
   userRow: {
     alignSelf: "flex-end",
     justifyContent: "flex-end",
-    paddingLeft: 48,
+    paddingLeft: 54,
   },
 
   aiAvatar: {
     width: 34,
     height: 34,
     borderRadius: 13,
-    backgroundColor: "rgba(56,189,248,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.22)",
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 10,
@@ -405,29 +284,29 @@ const styles = StyleSheet.create({
 
   messageBubble: {
     padding: 15,
-    borderRadius: 22,
+    borderRadius: 21,
     flexShrink: 1,
   },
 
   aiBubble: {
     flex: 1,
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderTopLeftRadius: 8,
   },
 
   userBubble: {
-    backgroundColor: "rgba(56,189,248,0.22)",
+    backgroundColor: colors.accentSoft,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.26)",
+    borderColor: "rgba(56,189,248,0.22)",
     borderTopRightRadius: 8,
   },
 
   messageText: {
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
   aiText: {
@@ -435,7 +314,7 @@ const styles = StyleSheet.create({
   },
 
   userText: {
-    color: "#FFFFFF",
+    color: colors.text,
   },
 
   inputDock: {
@@ -447,10 +326,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     gap: 10,
-    backgroundColor: "rgba(15,23,42,0.92)",
+    backgroundColor: colors.surfaceStrong,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.13)",
-    borderRadius: 28,
+    borderColor: colors.borderStrong,
+    borderRadius: 26,
     padding: 8,
   },
 
@@ -458,11 +337,11 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 44,
     maxHeight: 104,
-    borderRadius: 20,
+    borderRadius: 18,
     paddingHorizontal: 14,
     paddingVertical: 12,
     color: colors.text,
-    fontWeight: "700",
+    fontWeight: "600",
     fontSize: 14,
   },
 
@@ -470,6 +349,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 18,
+    backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: "rgba(56,189,248,0.25)",
     alignItems: "center",
     justifyContent: "center",
   },

@@ -1,5 +1,4 @@
 import { Image, Text, StyleSheet, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenBackground from "../components/ScreenBackground";
@@ -22,7 +21,7 @@ export default function WelcomeScreen({ onLogin, onRegister }: Props) {
           />
 
           <View style={styles.heroBadge}>
-            <Ionicons name="sparkles-outline" size={16} color={colors.cyan} />
+            <Ionicons name="sparkles-outline" size={16} color={colors.accent} />
             <Text style={styles.heroBadgeText}>AI-powered finance coach</Text>
           </View>
 
@@ -35,10 +34,10 @@ export default function WelcomeScreen({ onLogin, onRegister }: Props) {
 
         <View style={styles.bottom}>
           <TouchableOpacity activeOpacity={0.88} onPress={onRegister}>
-            <LinearGradient colors={[colors.cyan, colors.blue, colors.purple]} style={styles.primaryButton}>
+            <View style={styles.primaryButton}>
               <Text style={styles.primaryText}>Create Account</Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-            </LinearGradient>
+              <Ionicons name="arrow-forward" size={19} color={colors.text} />
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.secondaryButton} activeOpacity={0.8} onPress={onLogin}>
@@ -58,15 +57,17 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
     justifyContent: "space-between",
   },
+
   logo: {
-    width: "82%",
-    height: 90,
+    width: "78%",
+    height: 86,
     alignSelf: "center",
-    marginBottom: 70,
+    marginBottom: 66,
   },
+
   heroBadge: {
     alignSelf: "flex-start",
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 999,
@@ -77,50 +78,61 @@ const styles = StyleSheet.create({
     gap: 7,
     marginBottom: 18,
   },
+
   heroBadgeText: {
     color: colors.soft,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
   },
+
   title: {
     color: colors.text,
-    fontSize: 46,
-    fontWeight: "900",
-    lineHeight: 51,
-    letterSpacing: -2,
+    fontSize: 44,
+    fontWeight: "800",
+    lineHeight: 49,
+    letterSpacing: -1.8,
   },
+
   subtitle: {
-    color: colors.soft,
+    color: colors.muted,
     fontSize: 16,
     lineHeight: 24,
     marginTop: 18,
     maxWidth: 335,
     fontWeight: "600",
   },
+
   bottom: {
     gap: 12,
   },
+
   primaryButton: {
     height: 60,
-    borderRadius: 22,
+    borderRadius: 20,
+    backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: "rgba(56,189,248,0.28)",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
     gap: 10,
   },
+
   primaryText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "900",
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: "800",
   },
+
   secondaryButton: {
     height: 54,
     alignItems: "center",
     justifyContent: "center",
   },
+
   secondaryText: {
-    color: "#93C5FD",
+    color: colors.accent,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 });

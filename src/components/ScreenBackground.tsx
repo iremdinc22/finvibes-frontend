@@ -9,16 +9,10 @@ type Props = {
 
 export default function ScreenBackground({ children }: Props) {
   return (
-    <LinearGradient
-      colors={[colors.bg1, colors.bg2, colors.bg3]}
-      style={styles.screen}
-    >
+    <LinearGradient colors={[colors.bg1, colors.bg2, colors.bg3]} style={styles.screen}>
       <View style={styles.topGlow} />
+      <View style={styles.centerGlow} />
       <View style={styles.bottomGlow} />
-
-      <View style={styles.lineOne} />
-      <View style={styles.lineTwo} />
-
       {children}
     </LinearGradient>
   );
@@ -32,41 +26,31 @@ const styles = StyleSheet.create({
 
   topGlow: {
     position: "absolute",
-    width: 320,
-    height: 320,
+    width: 420,
+    height: 420,
     borderRadius: 999,
     backgroundColor: colors.glowBlue,
-    top: -180,
-    right: -150,
+    top: -260,
+    right: -180,
+  },
+
+  centerGlow: {
+    position: "absolute",
+    width: 360,
+    height: 360,
+    borderRadius: 999,
+    backgroundColor: "rgba(56,189,248,0.025)",
+    top: 250,
+    left: -220,
   },
 
   bottomGlow: {
     position: "absolute",
-    width: 320,
-    height: 320,
+    width: 380,
+    height: 380,
     borderRadius: 999,
     backgroundColor: colors.glowPurple,
-    bottom: -180,
-    left: -150,
-  },
-
-  lineOne: {
-    position: "absolute",
-    top: 180,
-    right: -80,
-    width: 280,
-    height: 1,
-    backgroundColor: "rgba(255,255,255,0.03)",
-    transform: [{ rotate: "-25deg" }],
-  },
-
-  lineTwo: {
-    position: "absolute",
-    bottom: 220,
-    left: -80,
-    width: 220,
-    height: 1,
-    backgroundColor: "rgba(255,255,255,0.03)",
-    transform: [{ rotate: "25deg" }],
+    bottom: -260,
+    right: -220,
   },
 });

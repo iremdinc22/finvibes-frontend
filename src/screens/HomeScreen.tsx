@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Circle } from "react-native-svg";
 
@@ -14,33 +13,23 @@ const remaining = monthlyIncome - totalSpent;
 const budgetUsed = Math.round((totalSpent / monthlyIncome) * 100);
 
 const spendingBreakdown = [
-  { label: "Lifestyle", value: 42, color: "#6D28D9" },
-  { label: "Savings", value: 28, color: "#A78BFA" },
-  { label: "Bills", value: 18, color: "#1D4ED8" },
-  { label: "Other", value: 12, color: "#0F172A" },
+  { label: "Lifestyle", value: 42, color: colors.accent },
+  { label: "Savings", value: 28, color: colors.purple },
+  { label: "Bills", value: 18, color: "#334155" },
+  { label: "Other", value: 12, color: "#1E293B" },
 ];
 
 const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 
 export default function HomeScreen() {
-  const handleProfilePress = () => {
-    console.log("Navigate to profile edit screen");
-  };
-
   return (
     <ScreenBackground>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.profileHeader}>
-          <TouchableOpacity
-            style={styles.profileArea}
-            activeOpacity={0.85}
-            onPress={handleProfilePress}
-          >
-            <LinearGradient colors={[colors.cyan, colors.blue, colors.purple]} style={styles.avatarRing}>
-              <View style={styles.avatarInner}>
-                <Text style={styles.avatarText}>İD</Text>
-              </View>
-            </LinearGradient>
+          <TouchableOpacity style={styles.profileArea} activeOpacity={0.85}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>İD</Text>
+            </View>
 
             <View>
               <Text style={styles.welcomeText}>Welcome back</Text>
@@ -54,54 +43,40 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <LinearGradient
-          colors={["rgba(255,255,255,0.10)", "rgba(255,255,255,0.035)"]}
-          style={styles.balanceCard}
-        >
+        <View style={styles.balanceCard}>
           <View style={styles.balanceTop}>
             <View>
-              <Text style={styles.balanceLabel}>Available Balance</Text>
+              <Text style={styles.cardLabel}>Available Balance</Text>
               <Text style={styles.balance}>{formatMoney(remaining)}</Text>
             </View>
 
             <View style={styles.growthBadge}>
-              <Ionicons name="trending-up" size={15} color={colors.green} />
+              <Ionicons name="trending-up" size={14} color={colors.green} />
               <Text style={styles.growthText}>12.4%</Text>
             </View>
           </View>
 
-          <View style={styles.balanceMetaRow}>
-            <View>
-              <Text style={styles.metaLabel}>Income</Text>
-              <Text style={styles.metaValue}>{formatMoney(monthlyIncome)}</Text>
-            </View>
-
-            <View style={styles.metaDivider} />
-
-            <View>
-              <Text style={styles.metaLabel}>Spent</Text>
-              <Text style={styles.metaValue}>{formatMoney(totalSpent)}</Text>
-            </View>
+          <View style={styles.metaRow}>
+            <MiniMetric label="Income" value={formatMoney(monthlyIncome)} />
+            <View style={styles.divider} />
+            <MiniMetric label="Spent" value={formatMoney(totalSpent)} />
           </View>
-        </LinearGradient>
-
-        <View style={styles.quickMenu}>
-          <Action icon="arrow-up-outline" label="Send" active />
-          <Action icon="add-outline" label="Add" />
-          <Action icon="scan-outline" label="Scan" />
-          <Action icon="wallet-outline" label="Wallet" />
         </View>
 
-        <LinearGradient colors={["#111827", "#172554", "#34216D"]} style={styles.spendingCard}>
-          <View style={styles.spendingTop}>
+        <View style={styles.quickMenu}>
+          <Action icon="add-outline" label="Add Expense" active />
+          <Action icon="sparkles-outline" label="Insights" />
+        </View>
+
+        <View style={styles.overviewCard}>
+          <View style={styles.cardTop}>
             <View>
-              <Text style={styles.cardLabel}>Monthly Overview</Text>
+              <Text style={styles.cardTitle}>Monthly Overview</Text>
               <Text style={styles.cardSub}>{budgetUsed}% of monthly income used</Text>
             </View>
 
             <View style={styles.monthBadge}>
-              <Text style={styles.monthBadgeText}>Month</Text>
-              <Ionicons name="chevron-down" size={14} color="#DDE7FF" />
+              <Text style={styles.monthText}>Month</Text>
             </View>
           </View>
 
@@ -114,41 +89,33 @@ export default function HomeScreen() {
             </View>
           </View>
 
-          <View style={styles.spendingSummary}>
-            <View>
-              <Text style={styles.summaryLabel}>Spent</Text>
-              <Text style={styles.summaryValue}>{formatMoney(totalSpent)}</Text>
-            </View>
-
-            <View>
-              <Text style={styles.summaryLabel}>Savings goal</Text>
-              <Text style={styles.summaryValue}>{formatMoney(savingGoal)}</Text>
-            </View>
+          <View style={styles.summaryPanel}>
+            <MiniMetric label="Spent" value={formatMoney(totalSpent)} />
+            <View style={styles.divider} />
+            <MiniMetric label="Savings goal" value={formatMoney(savingGoal)} />
           </View>
 
-          <View style={styles.chartFooter}>
+          <View style={styles.legendRow}>
             {spendingBreakdown.slice(0, 3).map((item) => (
-              <View style={styles.footerItem} key={item.label}>
+              <View style={styles.legendItem} key={item.label}>
                 <View style={[styles.dot, { backgroundColor: item.color }]} />
-                <Text style={styles.footerText}>{item.label}</Text>
+                <Text style={styles.legendText}>{item.label}</Text>
               </View>
             ))}
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.aiPanel}>
           <View style={styles.aiIcon}>
-            <Ionicons name="sparkles-outline" size={22} color={colors.cyan} />
+            <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
           </View>
 
           <View style={{ flex: 1 }}>
             <Text style={styles.aiTitle}>AI detected a trend</Text>
             <Text style={styles.aiText}>
-              Shopping is trending upward. Reducing small purchases this week can help you protect your savings goal.
+              Shopping is trending upward. Reducing small purchases this week can help protect your savings goal.
             </Text>
           </View>
-
-          <Ionicons name="chevron-forward" size={20} color={colors.muted} />
         </View>
 
         <View style={styles.sectionHeader}>
@@ -167,57 +134,63 @@ export default function HomeScreen() {
 function HeaderButton({ icon }: { icon: keyof typeof Ionicons.glyphMap }) {
   return (
     <TouchableOpacity style={styles.circleButton} activeOpacity={0.8}>
-      <Ionicons name={icon} size={20} color="#DDE7FF" />
+      <Ionicons name={icon} size={19} color={colors.soft} />
     </TouchableOpacity>
   );
 }
 
+function MiniMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.metric}>
+      <Text style={styles.metricLabel}>{label}</Text>
+      <Text style={styles.metricValue}>{value}</Text>
+    </View>
+  );
+}
+
 function DonutChart() {
-  const size = 220;
-  const strokeWidth = 28;
+  const size = 204;
+  const strokeWidth = 24;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const gap = 10;
-
+  const gap = 8;
   let accumulated = 0;
 
   return (
-    <View style={styles.donutShadow}>
-      <Svg width={size} height={size}>
-        <Circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="rgba(255,255,255,0.10)"
-          strokeWidth={strokeWidth}
-          fill="none"
-        />
+    <Svg width={size} height={size}>
+      <Circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth={strokeWidth}
+        fill="none"
+      />
 
-        {spendingBreakdown.map((item) => {
-          const segmentLength = (item.value / 100) * circumference - gap;
-          const offset = -((accumulated / 100) * circumference);
-          accumulated += item.value;
+      {spendingBreakdown.map((item) => {
+        const segmentLength = (item.value / 100) * circumference - gap;
+        const offset = -((accumulated / 100) * circumference);
+        accumulated += item.value;
 
-          return (
-            <Circle
-              key={item.label}
-              cx={size / 2}
-              cy={size / 2}
-              r={radius}
-              stroke={item.color}
-              strokeWidth={strokeWidth}
-              fill="none"
-              strokeLinecap="round"
-              strokeDasharray={`${segmentLength} ${circumference}`}
-              strokeDashoffset={offset}
-              rotation="-100"
-              originX={size / 2}
-              originY={size / 2}
-            />
-          );
-        })}
-      </Svg>
-    </View>
+        return (
+          <Circle
+            key={item.label}
+            cx={size / 2}
+            cy={size / 2}
+            r={radius}
+            stroke={item.color}
+            strokeWidth={strokeWidth}
+            fill="none"
+            strokeLinecap="round"
+            strokeDasharray={`${segmentLength} ${circumference}`}
+            strokeDashoffset={offset}
+            rotation="-100"
+            originX={size / 2}
+            originY={size / 2}
+          />
+        );
+      })}
+    </Svg>
   );
 }
 
@@ -231,18 +204,9 @@ function Action({
   active?: boolean;
 }) {
   return (
-    <TouchableOpacity style={styles.actionItem} activeOpacity={0.85}>
-      {active ? (
-        <LinearGradient colors={[colors.cyan, colors.blue]} style={styles.actionIconActive}>
-          <Ionicons name={icon} size={22} color="#FFFFFF" />
-        </LinearGradient>
-      ) : (
-        <View style={styles.actionIcon}>
-          <Ionicons name={icon} size={22} color="#DDE7FF" />
-        </View>
-      )}
-
-      <Text style={[styles.actionLabel, active && styles.actionLabelActive]}>{label}</Text>
+    <TouchableOpacity style={[styles.actionButton, active && styles.actionButtonActive]} activeOpacity={0.85}>
+      <Ionicons name={icon} size={20} color={active ? colors.text : colors.muted} />
+      <Text style={[styles.actionText, active && styles.actionTextActive]}>{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -262,7 +226,7 @@ function Transaction({
     <View style={styles.transactionCard}>
       <View style={styles.transactionLeft}>
         <View style={styles.transactionIcon}>
-          <Ionicons name={icon} size={21} color="#93C5FD" />
+          <Ionicons name={icon} size={20} color={colors.accent} />
         </View>
 
         <View style={{ flex: 1 }}>
@@ -297,38 +261,34 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  avatarRing: {
-    width: 54,
-    height: 54,
-    borderRadius: 19,
-    padding: 2,
-  },
-
-  avatarInner: {
-    flex: 1,
-    borderRadius: 17,
-    backgroundColor: "#07111F",
+  avatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: colors.surfaceStrong,
+    borderWidth: 1,
+    borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
 
   avatarText: {
     color: colors.text,
-    fontWeight: "900",
+    fontWeight: "800",
     fontSize: 16,
   },
 
   welcomeText: {
     color: colors.muted,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
     marginBottom: 4,
   },
 
   userName: {
     color: colors.text,
     fontSize: 18,
-    fontWeight: "900",
+    fontWeight: "800",
   },
 
   headerActions: {
@@ -340,7 +300,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 999,
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: "center",
@@ -348,9 +308,10 @@ const styles = StyleSheet.create({
   },
 
   balanceCard: {
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 32,
+    borderRadius: 28,
     padding: 22,
     marginBottom: 16,
   },
@@ -361,27 +322,27 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 
-  balanceLabel: {
+  cardLabel: {
     color: colors.muted,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "700",
     marginBottom: 10,
   },
 
   balance: {
     color: colors.text,
-    fontSize: 44,
+    fontSize: 42,
     fontWeight: "300",
-    letterSpacing: -2,
+    letterSpacing: -1.8,
   },
 
   growthBadge: {
-    backgroundColor: "rgba(34,197,94,0.12)",
+    backgroundColor: "rgba(34,197,94,0.10)",
     borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.35)",
+    borderColor: "rgba(34,197,94,0.22)",
     borderRadius: 999,
-    paddingHorizontal: 11,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
@@ -389,131 +350,118 @@ const styles = StyleSheet.create({
 
   growthText: {
     color: colors.green,
-    fontSize: 13,
-    fontWeight: "900",
-  },
-
-  balanceMetaRow: {
-    marginTop: 18,
-    backgroundColor: "rgba(3,7,18,0.28)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    borderRadius: 22,
-    padding: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-
-  metaLabel: {
-    color: "#7C8BA5",
     fontSize: 12,
     fontWeight: "800",
+  },
+
+  metaRow: {
+    marginTop: 18,
+    backgroundColor: "rgba(2,6,23,0.35)",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 20,
+    padding: 15,
+    flexDirection: "row",
+  },
+
+  metric: {
+    flex: 1,
+  },
+
+  metricLabel: {
+    color: colors.faint,
+    fontSize: 12,
+    fontWeight: "700",
     marginBottom: 5,
   },
 
-  metaValue: {
+  metricValue: {
     color: colors.text,
     fontSize: 14,
-    fontWeight: "900",
-  },
-
-  metaDivider: {
-    width: 1,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    marginHorizontal: 8,
-  },
-
-  quickMenu: {
-    backgroundColor: colors.darkGlass,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 28,
-    paddingVertical: 16,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 24,
-  },
-
-  actionItem: {
-    alignItems: "center",
-    width: "24%",
-  },
-
-  actionIcon: {
-    width: 54,
-    height: 54,
-    borderRadius: 19,
-    backgroundColor: "rgba(255,255,255,0.07)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 9,
-  },
-
-  actionIconActive: {
-    width: 54,
-    height: 54,
-    borderRadius: 19,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 9,
-  },
-
-  actionLabel: {
-    color: colors.muted,
-    fontSize: 12,
     fontWeight: "800",
   },
 
-  actionLabelActive: {
+  divider: {
+    width: 1,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    marginHorizontal: 12,
+  },
+
+  quickMenu: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 16,
+  },
+
+  actionButton: {
+    flex: 1,
+    height: 54,
+    borderRadius: 20,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+
+  actionButtonActive: {
+    backgroundColor: colors.accentSoft,
+    borderColor: "rgba(56,189,248,0.24)",
+  },
+
+  actionText: {
+    color: colors.muted,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  actionTextActive: {
     color: colors.text,
   },
 
-  spendingCard: {
-    borderRadius: 32,
+  overviewCard: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 28,
     padding: 22,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "rgba(147,197,253,0.18)",
   },
 
-  spendingTop: {
+  cardTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
     marginBottom: 12,
   },
 
-  cardLabel: {
-    color: "#CBD5E1",
-    fontWeight: "900",
-    fontSize: 16,
+  cardTitle: {
+    color: colors.text,
+    fontWeight: "800",
+    fontSize: 17,
   },
 
   cardSub: {
-    color: "#AFC2E8",
+    color: colors.muted,
     marginTop: 6,
-    fontWeight: "700",
+    fontWeight: "600",
     fontSize: 13,
   },
 
   monthBadge: {
-    backgroundColor: "rgba(255,255,255,0.12)",
+    backgroundColor: colors.surfaceStrong,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.18)",
+    borderColor: colors.border,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 14,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
+    borderRadius: 999,
   },
 
-  monthBadgeText: {
-    color: colors.text,
-    fontWeight: "800",
+  monthText: {
+    color: colors.soft,
+    fontWeight: "700",
     fontSize: 12,
   },
 
@@ -524,13 +472,6 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
 
-  donutShadow: {
-    shadowColor: "#7C3AED",
-    shadowOpacity: 0.25,
-    shadowRadius: 18,
-    shadowOffset: { width: 0, height: 10 },
-  },
-
   chartCenter: {
     position: "absolute",
     alignItems: "center",
@@ -538,98 +479,85 @@ const styles = StyleSheet.create({
 
   chartPercent: {
     color: colors.text,
-    fontSize: 42,
-    fontWeight: "900",
-    letterSpacing: -1.5,
+    fontSize: 38,
+    fontWeight: "800",
+    letterSpacing: -1.2,
   },
 
   chartLabel: {
-    color: "#CBD5E1",
+    color: colors.muted,
     fontSize: 13,
-    fontWeight: "800",
+    fontWeight: "600",
     marginTop: 2,
   },
 
-  spendingSummary: {
-    backgroundColor: "rgba(3,7,18,0.25)",
+  summaryPanel: {
+    backgroundColor: "rgba(2,6,23,0.35)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    borderRadius: 22,
+    borderColor: "rgba(255,255,255,0.06)",
+    borderRadius: 20,
     padding: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
     marginBottom: 14,
   },
 
-  summaryLabel: {
-    color: "#8EA4C8",
-    fontSize: 12,
-    fontWeight: "900",
-    marginBottom: 5,
-  },
-
-  summaryValue: {
-    color: colors.text,
-    fontSize: 15,
-    fontWeight: "900",
-  },
-
-  chartFooter: {
+  legendRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 18,
+    gap: 16,
   },
 
-  footerItem: {
+  legendItem: {
     flexDirection: "row",
     alignItems: "center",
     gap: 7,
   },
 
   dot: {
-    width: 9,
-    height: 9,
+    width: 8,
+    height: 8,
     borderRadius: 99,
   },
 
-  footerText: {
-    color: "#CBD5E1",
+  legendText: {
+    color: colors.muted,
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: "600",
   },
 
   aiPanel: {
     marginBottom: 24,
-    backgroundColor: "rgba(14,165,233,0.09)",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.22)",
-    borderRadius: 28,
-    padding: 17,
+    borderColor: colors.border,
+    borderRadius: 24,
+    padding: 16,
     flexDirection: "row",
     alignItems: "center",
-    gap: 14,
+    gap: 13,
   },
 
   aiIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 17,
-    backgroundColor: "rgba(56,189,248,0.12)",
+    width: 42,
+    height: 42,
+    borderRadius: 15,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
 
   aiTitle: {
     color: colors.text,
-    fontWeight: "900",
-    fontSize: 16,
+    fontWeight: "800",
+    fontSize: 15,
   },
 
   aiText: {
-    color: colors.soft,
+    color: colors.muted,
     lineHeight: 20,
     marginTop: 5,
     fontSize: 13,
+    fontWeight: "600",
   },
 
   sectionHeader: {
@@ -641,24 +569,23 @@ const styles = StyleSheet.create({
 
   sectionTitle: {
     color: colors.text,
-    fontSize: 20,
-    fontWeight: "900",
-    letterSpacing: -0.5,
+    fontSize: 19,
+    fontWeight: "800",
   },
 
   viewAll: {
-    color: colors.cyan,
-    fontWeight: "900",
+    color: colors.accent,
+    fontWeight: "700",
     fontSize: 13,
   },
 
   transactionCard: {
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 24,
+    borderRadius: 22,
     padding: 15,
-    marginBottom: 12,
+    marginBottom: 11,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -672,30 +599,30 @@ const styles = StyleSheet.create({
   },
 
   transactionIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 16,
-    backgroundColor: "rgba(59,130,246,0.15)",
+    width: 42,
+    height: 42,
+    borderRadius: 15,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
 
   transactionTitle: {
     color: colors.text,
-    fontWeight: "900",
+    fontWeight: "700",
     fontSize: 15,
   },
 
   transactionTime: {
-    color: "#7C8BA5",
+    color: colors.faint,
     marginTop: 4,
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
   transactionAmount: {
-    color: colors.text,
-    fontWeight: "900",
+    color: colors.soft,
+    fontWeight: "800",
     fontSize: 15,
   },
 });

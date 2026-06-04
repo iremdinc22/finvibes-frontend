@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenBackground from "../components/ScreenBackground";
@@ -11,41 +10,11 @@ const totalSpent = 12450;
 const remaining = monthlyIncome - totalSpent;
 
 const expenses: Expense[] = [
-  {
-    id: "1",
-    title: "Grocery Store",
-    amount: 850,
-    category: "Shopping",
-    date: "Today • 5:40 PM",
-  },
-  {
-    id: "2",
-    title: "Coffee",
-    amount: 120,
-    category: "Coffee",
-    date: "Today • 2:20 PM",
-  },
-  {
-    id: "3",
-    title: "Metro",
-    amount: 35,
-    category: "Transport",
-    date: "Yesterday • 9:10 AM",
-  },
-  {
-    id: "4",
-    title: "Electricity Bill",
-    amount: 920,
-    category: "Bills",
-    date: "Monday • 8:00 PM",
-  },
-  {
-    id: "5",
-    title: "Dinner",
-    amount: 420,
-    category: "Food",
-    date: "Sunday • 8:15 PM",
-  },
+  { id: "1", title: "Grocery Store", amount: 850, category: "Shopping", date: "Today • 5:40 PM" },
+  { id: "2", title: "Coffee", amount: 120, category: "Coffee", date: "Today • 2:20 PM" },
+  { id: "3", title: "Metro", amount: 35, category: "Transport", date: "Yesterday • 9:10 AM" },
+  { id: "4", title: "Electricity Bill", amount: 920, category: "Bills", date: "Monday • 8:00 PM" },
+  { id: "5", title: "Dinner", amount: 420, category: "Food", date: "Sunday • 8:15 PM" },
 ];
 
 const iconMap: Record<ExpenseCategory, keyof typeof Ionicons.glyphMap> = {
@@ -69,27 +38,6 @@ const iconMap: Record<ExpenseCategory, keyof typeof Ionicons.glyphMap> = {
   Other: "card-outline",
 };
 
-const categoryColorMap: Record<ExpenseCategory, string> = {
-  Food: "#F97316",
-  Coffee: "#A78BFA",
-  Groceries: "#22C55E",
-  Shopping: "#A855F7",
-  Transport: "#38BDF8",
-  Bills: "#6366F1",
-  Health: "#FB7185",
-  Fitness: "#34D399",
-  Education: "#60A5FA",
-  Entertainment: "#E879F9",
-  Travel: "#2DD4BF",
-  Subscription: "#818CF8",
-  Investment: "#22C55E",
-  Savings: "#38BDF8",
-  Insurance: "#93C5FD",
-  Salary: "#4ADE80",
-  Gift: "#F472B6",
-  Other: "#94A3B8",
-};
-
 const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 
 export default function TransactionsScreen() {
@@ -103,7 +51,7 @@ export default function TransactionsScreen() {
           </View>
 
           <TouchableOpacity style={styles.headerButton} activeOpacity={0.85}>
-            <Ionicons name="search-outline" size={20} color={colors.text} />
+            <Ionicons name="search-outline" size={20} color={colors.soft} />
           </TouchableOpacity>
         </View>
 
@@ -113,35 +61,27 @@ export default function TransactionsScreen() {
           <FilterChip label="Month" />
         </View>
 
-        <LinearGradient
-          colors={["rgba(255,255,255,0.10)", "rgba(255,255,255,0.035)"]}
-          style={styles.summaryCard}
-        >
-          <View style={styles.summaryTop}>
-            <View>
-              <Text style={styles.summaryLabel}>Total spent</Text>
-              <Text style={styles.summaryAmount}>{formatMoney(totalSpent)}</Text>
-            </View>
-
-            <View style={styles.summaryIcon}>
-              <Ionicons name="analytics-outline" size={25} color={colors.cyan} />
-            </View>
+        <View style={styles.summaryCard}>
+          <View>
+            <Text style={styles.summaryLabel}>Total spent</Text>
+            <Text style={styles.summaryAmount}>{formatMoney(totalSpent)}</Text>
+            <Text style={styles.summaryHint}>42% of monthly income used</Text>
           </View>
 
-          <Text style={styles.summaryHint}>42% of your monthly income used this month</Text>
-
-          <View style={styles.metricsRow}>
-            <Metric label="Income" value={formatMoney(monthlyIncome)} />
-            <View style={styles.metricDivider} />
-            <Metric label="Remaining" value={formatMoney(remaining)} />
+          <View style={styles.summaryIcon}>
+            <Ionicons name="analytics-outline" size={23} color={colors.accent} />
           </View>
-        </LinearGradient>
+        </View>
+
+        <View style={styles.metricsRow}>
+          <Metric label="Income" value={formatMoney(monthlyIncome)} />
+          <View style={styles.metricDivider} />
+          <Metric label="Remaining" value={formatMoney(remaining)} />
+        </View>
 
         <View style={styles.listHeader}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <TouchableOpacity activeOpacity={0.85}>
-            <Text style={styles.exportText}>Export</Text>
-          </TouchableOpacity>
+          <Text style={styles.exportText}>Export</Text>
         </View>
 
         <FlatList
@@ -152,34 +92,19 @@ export default function TransactionsScreen() {
           renderItem={({ item }) => (
             <TouchableOpacity activeOpacity={0.86} style={styles.transactionCard}>
               <View style={styles.left}>
-                <View
-                  style={[
-                    styles.iconBox,
-                    { backgroundColor: `${categoryColorMap[item.category]}24` },
-                  ]}
-                >
-                  <Ionicons
-                    name={iconMap[item.category]}
-                    size={21}
-                    color={categoryColorMap[item.category]}
-                  />
+                <View style={styles.iconBox}>
+                  <Ionicons name={iconMap[item.category]} size={20} color={colors.accent} />
                 </View>
 
                 <View style={{ flex: 1 }}>
                   <Text style={styles.transactionTitle}>{item.title}</Text>
-
-                  <View style={styles.metaRow}>
-                    <Text style={styles.transactionMeta}>{item.date}</Text>
-                    <View style={styles.metaDot} />
-                    <Text style={styles.categoryText}>{item.category}</Text>
-                  </View>
+                  <Text style={styles.transactionMeta}>
+                    {item.category} • {item.date}
+                  </Text>
                 </View>
               </View>
 
-              <View style={styles.amountBlock}>
-                <Text style={styles.amount}>-{formatMoney(item.amount)}</Text>
-                <Text style={styles.statusText}>Completed</Text>
-              </View>
+              <Text style={styles.amount}>-{formatMoney(item.amount)}</Text>
             </TouchableOpacity>
           )}
         />
@@ -190,16 +115,11 @@ export default function TransactionsScreen() {
 
 function FilterChip({ label, active = false }: { label: string; active?: boolean }) {
   return (
-    <TouchableOpacity activeOpacity={0.85} style={styles.filterItem}>
-      {active ? (
-        <LinearGradient colors={[colors.cyan, colors.blue]} style={styles.filterChipActive}>
-          <Text style={styles.filterTextActive}>{label}</Text>
-        </LinearGradient>
-      ) : (
-        <View style={styles.filterChip}>
-          <Text style={styles.filterText}>{label}</Text>
-        </View>
-      )}
+    <TouchableOpacity
+      activeOpacity={0.85}
+      style={[styles.filterChip, active && styles.filterChipActive]}
+    >
+      <Text style={[styles.filterText, active && styles.filterTextActive]}>{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -214,260 +134,109 @@ function Metric({ label, value }: { label: string; value: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 22,
-    paddingTop: 58,
-  },
-
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-
-  kicker: {
-    color: colors.cyan,
-    fontSize: 14,
-    fontWeight: "900",
-    marginBottom: 8,
-  },
-
-  title: {
-    color: colors.text,
-    fontSize: 38,
-    fontWeight: "900",
-    letterSpacing: -1.5,
-  },
-
+  container: { flex: 1, padding: 22, paddingTop: 58 },
+  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  kicker: { color: colors.accent, fontSize: 13, fontWeight: "800", marginBottom: 8 },
+  title: { color: colors.text, fontSize: 34, fontWeight: "800", letterSpacing: -1.1 },
   headerButton: {
     width: 46,
     height: 46,
     borderRadius: 17,
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
-
   filterShell: {
     marginTop: 22,
-    marginBottom: 18,
-    backgroundColor: "rgba(15,23,42,0.70)",
+    marginBottom: 16,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
+    borderColor: colors.border,
     borderRadius: 999,
     padding: 5,
     flexDirection: "row",
     gap: 6,
   },
-
-  filterItem: {
-    flex: 1,
-  },
-
   filterChip: {
-    height: 40,
+    flex: 1,
+    height: 39,
     borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
   },
-
   filterChipActive: {
-    height: 40,
-    borderRadius: 999,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  filterText: {
-    color: colors.muted,
-    fontWeight: "900",
-    fontSize: 13,
-  },
-
-  filterTextActive: {
-    color: "#FFFFFF",
-    fontWeight: "900",
-    fontSize: 13,
-  },
-
-  summaryCard: {
+    backgroundColor: colors.accentSoft,
     borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 32,
-    padding: 22,
-    marginBottom: 22,
+    borderColor: "rgba(56,189,248,0.22)",
   },
-
-  summaryTop: {
+  filterText: { color: colors.muted, fontWeight: "700", fontSize: 13 },
+  filterTextActive: { color: colors.text },
+  summaryCard: {
+    backgroundColor: colors.surfaceStrong,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
+    borderRadius: 28,
+    padding: 20,
+    marginBottom: 12,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    alignItems: "center",
   },
-
-  summaryLabel: {
-    color: colors.muted,
-    fontWeight: "900",
-    marginBottom: 8,
-    fontSize: 14,
-  },
-
-  summaryAmount: {
-    color: colors.text,
-    fontSize: 36,
-    fontWeight: "900",
-    letterSpacing: -1.2,
-  },
-
-  summaryHint: {
-    color: colors.soft,
-    marginTop: 8,
-    fontWeight: "700",
-    fontSize: 13,
-  },
-
+  summaryLabel: { color: colors.muted, fontWeight: "700", marginBottom: 8, fontSize: 13 },
+  summaryAmount: { color: colors.text, fontSize: 34, fontWeight: "800", letterSpacing: -1 },
+  summaryHint: { color: colors.faint, marginTop: 7, fontWeight: "600", fontSize: 13 },
   summaryIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 20,
-    backgroundColor: "rgba(56,189,248,0.13)",
-    borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.20)",
+    width: 52,
+    height: 52,
+    borderRadius: 18,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
-
   metricsRow: {
-    marginTop: 18,
-    backgroundColor: "rgba(3,7,18,0.28)",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
+    borderColor: colors.border,
     borderRadius: 22,
     padding: 15,
     flexDirection: "row",
-    justifyContent: "space-between",
+    marginBottom: 22,
   },
-
-  metric: {
-    flex: 1,
-  },
-
-  metricLabel: {
-    color: "#7C8BA5",
-    fontSize: 12,
-    fontWeight: "800",
-    marginBottom: 5,
-  },
-
-  metricValue: {
-    color: colors.text,
-    fontSize: 14,
-    fontWeight: "900",
-  },
-
-  metricDivider: {
-    width: 1,
-    backgroundColor: "rgba(255,255,255,0.10)",
-    marginHorizontal: 10,
-  },
-
+  metric: { flex: 1 },
+  metricLabel: { color: colors.faint, fontSize: 12, fontWeight: "700", marginBottom: 5 },
+  metricValue: { color: colors.text, fontSize: 14, fontWeight: "800" },
+  metricDivider: { width: 1, backgroundColor: "rgba(255,255,255,0.08)", marginHorizontal: 12 },
   listHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 14,
   },
-
-  sectionTitle: {
-    color: colors.text,
-    fontSize: 20,
-    fontWeight: "900",
-    letterSpacing: -0.5,
-  },
-
-  exportText: {
-    color: colors.cyan,
-    fontWeight: "900",
-    fontSize: 13,
-  },
-
+  sectionTitle: { color: colors.text, fontSize: 19, fontWeight: "800" },
+  exportText: { color: colors.accent, fontWeight: "700", fontSize: 13 },
   transactionCard: {
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 25,
-    padding: 16,
-    marginBottom: 13,
+    borderRadius: 22,
+    padding: 15,
+    marginBottom: 11,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
-  left: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 13,
-    flex: 1,
-  },
-
+  left: { flexDirection: "row", alignItems: "center", gap: 13, flex: 1 },
   iconBox: {
-    width: 50,
-    height: 50,
-    borderRadius: 18,
+    width: 42,
+    height: 42,
+    borderRadius: 15,
+    backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
   },
-
-  transactionTitle: {
-    color: colors.text,
-    fontWeight: "900",
-    fontSize: 15,
-  },
-
-  metaRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 5,
-    flexWrap: "wrap",
-  },
-
-  transactionMeta: {
-    color: "#7C8BA5",
-    fontSize: 12,
-    fontWeight: "700",
-  },
-
-  metaDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 99,
-    backgroundColor: "#64748B",
-    marginHorizontal: 7,
-  },
-
-  categoryText: {
-    color: colors.muted,
-    fontSize: 12,
-    fontWeight: "800",
-  },
-
-  amountBlock: {
-    alignItems: "flex-end",
-    marginLeft: 10,
-  },
-
-  amount: {
-    color: colors.text,
-    fontWeight: "900",
-    fontSize: 15,
-  },
-
-  statusText: {
-    color: colors.green,
-    fontSize: 11,
-    fontWeight: "900",
-    marginTop: 5,
-  },
+  transactionTitle: { color: colors.text, fontWeight: "700", fontSize: 15 },
+  transactionMeta: { color: colors.faint, marginTop: 4, fontSize: 12, fontWeight: "600" },
+  amount: { color: colors.soft, fontWeight: "800", fontSize: 15 },
 });

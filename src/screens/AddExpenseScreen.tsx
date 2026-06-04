@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 
 import ScreenBackground from "../components/ScreenBackground";
@@ -43,16 +42,13 @@ export default function AddExpenseScreen() {
           </View>
 
           <View style={styles.headerIcon}>
-            <Ionicons name="receipt-outline" size={22} color={colors.cyan} />
+            <Ionicons name="receipt-outline" size={21} color={colors.accent} />
           </View>
         </View>
 
         <Text style={styles.subtitle}>Capture your spending in seconds.</Text>
 
-        <LinearGradient
-          colors={["rgba(255,255,255,0.11)", "rgba(255,255,255,0.035)"]}
-          style={styles.amountCard}
-        >
+        <View style={styles.amountCard}>
           <View style={styles.amountTop}>
             <Text style={styles.amountLabel}>Amount</Text>
 
@@ -66,7 +62,7 @@ export default function AddExpenseScreen() {
             <TextInput
               style={styles.amountInput}
               placeholder="0"
-              placeholderTextColor="#64748B"
+              placeholderTextColor={colors.faint}
               keyboardType="numeric"
               value={amount}
               onChangeText={setAmount}
@@ -74,10 +70,10 @@ export default function AddExpenseScreen() {
           </View>
 
           <View style={styles.amountFooter}>
-            <Ionicons name="information-circle-outline" size={16} color={colors.muted} />
+            <Ionicons name="information-circle-outline" size={16} color={colors.faint} />
             <Text style={styles.amountHint}>This will be added to your monthly spending.</Text>
           </View>
-        </LinearGradient>
+        </View>
 
         <View style={styles.formCard}>
           <Text style={styles.label}>Expense name</Text>
@@ -87,7 +83,7 @@ export default function AddExpenseScreen() {
             <TextInput
               style={styles.input}
               placeholder="Coffee, grocery, taxi..."
-              placeholderTextColor="#64748B"
+              placeholderTextColor={colors.faint}
               value={title}
               onChangeText={setTitle}
             />
@@ -111,15 +107,13 @@ export default function AddExpenseScreen() {
                   onPress={() => setSelectedCategory(item.label)}
                   style={[styles.categoryCard, isSelected && styles.categoryCardActive]}
                 >
-                  {isSelected ? (
-                    <LinearGradient colors={[colors.cyan, colors.blue]} style={styles.categoryIconActive}>
-                      <Ionicons name={item.icon} size={19} color="#FFFFFF" />
-                    </LinearGradient>
-                  ) : (
-                    <View style={styles.categoryIcon}>
-                      <Ionicons name={item.icon} size={19} color={colors.muted} />
-                    </View>
-                  )}
+                  <View style={[styles.categoryIcon, isSelected && styles.categoryIconActive]}>
+                    <Ionicons
+                      name={item.icon}
+                      size={18}
+                      color={isSelected ? colors.accent : colors.muted}
+                    />
+                  </View>
 
                   <Text style={[styles.categoryText, isSelected && styles.categoryTextActive]}>
                     {item.label}
@@ -130,10 +124,10 @@ export default function AddExpenseScreen() {
           </View>
 
           <TouchableOpacity activeOpacity={0.88} onPress={handleAddExpense}>
-            <LinearGradient colors={[colors.cyan, colors.blue, colors.purple]} style={styles.button}>
+            <View style={styles.button}>
               <Text style={styles.buttonText}>Save Expense</Text>
-              <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
-            </LinearGradient>
+              <Ionicons name="arrow-forward" size={19} color={colors.text} />
+            </View>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -150,7 +144,7 @@ function InfoPill({
 }) {
   return (
     <TouchableOpacity style={styles.infoPill} activeOpacity={0.85}>
-      <Ionicons name={icon} size={18} color={colors.cyan} />
+      <Ionicons name={icon} size={18} color={colors.accent} />
       <Text style={styles.infoPillText}>{label}</Text>
     </TouchableOpacity>
   );
@@ -170,26 +164,26 @@ const styles = StyleSheet.create({
   },
 
   kicker: {
-    color: colors.cyan,
+    color: colors.accent,
     fontSize: 14,
-    fontWeight: "900",
+    fontWeight: "800",
     marginBottom: 8,
   },
 
   title: {
     color: colors.text,
-    fontSize: 38,
-    fontWeight: "900",
-    letterSpacing: -1.5,
+    fontSize: 34,
+    fontWeight: "800",
+    letterSpacing: -1.2,
   },
 
   headerIcon: {
-    width: 52,
-    height: 52,
-    borderRadius: 19,
-    backgroundColor: "rgba(56,189,248,0.12)",
+    width: 48,
+    height: 48,
+    borderRadius: 17,
+    backgroundColor: colors.accentSoft,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.24)",
+    borderColor: "rgba(56,189,248,0.18)",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -197,16 +191,18 @@ const styles = StyleSheet.create({
   subtitle: {
     color: colors.muted,
     marginTop: 8,
-    marginBottom: 24,
+    marginBottom: 22,
     lineHeight: 22,
+    fontWeight: "600",
   },
 
   amountCard: {
-    borderRadius: 34,
+    backgroundColor: colors.surface,
+    borderRadius: 28,
     padding: 22,
     borderWidth: 1,
     borderColor: colors.border,
-    marginBottom: 18,
+    marginBottom: 16,
   },
 
   amountTop: {
@@ -218,22 +214,22 @@ const styles = StyleSheet.create({
   amountLabel: {
     color: colors.muted,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 
   currencyPill: {
-    backgroundColor: "rgba(56,189,248,0.12)",
+    backgroundColor: colors.surfaceStrong,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.25)",
-    paddingHorizontal: 12,
+    borderColor: colors.border,
+    paddingHorizontal: 11,
     paddingVertical: 7,
     borderRadius: 999,
   },
 
   currencyPillText: {
-    color: colors.cyan,
+    color: colors.soft,
     fontSize: 12,
-    fontWeight: "900",
+    fontWeight: "700",
   },
 
   amountRow: {
@@ -243,8 +239,8 @@ const styles = StyleSheet.create({
   },
 
   currency: {
-    color: colors.cyan,
-    fontSize: 42,
+    color: colors.accent,
+    fontSize: 40,
     fontWeight: "300",
     marginRight: 10,
   },
@@ -252,9 +248,9 @@ const styles = StyleSheet.create({
   amountInput: {
     flex: 1,
     color: colors.text,
-    fontSize: 58,
+    fontSize: 54,
     fontWeight: "300",
-    letterSpacing: -2.5,
+    letterSpacing: -2,
     paddingVertical: 4,
   },
 
@@ -262,38 +258,38 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 7,
-    marginTop: 6,
+    marginTop: 4,
   },
 
   amountHint: {
-    color: colors.muted,
+    color: colors.faint,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "600",
     flex: 1,
   },
 
   formCard: {
-    backgroundColor: colors.glass,
+    backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 30,
+    borderRadius: 28,
     padding: 20,
   },
 
   label: {
-    color: "#CBD5E1",
+    color: colors.soft,
     fontSize: 13,
-    fontWeight: "900",
+    fontWeight: "700",
     marginBottom: 9,
     marginTop: 14,
   },
 
   inputBox: {
-    height: 58,
-    borderRadius: 21,
-    backgroundColor: "rgba(3,7,18,0.48)",
+    height: 56,
+    borderRadius: 20,
+    backgroundColor: "rgba(2,6,23,0.36)",
     borderWidth: 1,
-    borderColor: "rgba(148,163,184,0.16)",
+    borderColor: "rgba(255,255,255,0.065)",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -304,7 +300,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.text,
     fontSize: 15,
-    fontWeight: "700",
+    fontWeight: "600",
   },
 
   rowFields: {
@@ -315,11 +311,11 @@ const styles = StyleSheet.create({
 
   infoPill: {
     flex: 1,
-    height: 50,
-    borderRadius: 19,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    height: 48,
+    borderRadius: 18,
+    backgroundColor: colors.surfaceStrong,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
+    borderColor: colors.border,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -328,54 +324,50 @@ const styles = StyleSheet.create({
 
   infoPillText: {
     color: colors.soft,
-    fontWeight: "900",
+    fontWeight: "700",
     fontSize: 13,
   },
 
   categoryGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    gap: 10,
     marginBottom: 24,
   },
 
   categoryCard: {
-    width: "47%",
-    backgroundColor: "rgba(255,255,255,0.06)",
+    width: "48%",
+    backgroundColor: "rgba(2,6,23,0.28)",
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.10)",
-    borderRadius: 22,
-    padding: 14,
+    borderColor: "rgba(255,255,255,0.065)",
+    borderRadius: 20,
+    padding: 13,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
   },
 
   categoryCardActive: {
-    backgroundColor: "rgba(56,189,248,0.12)",
-    borderColor: "rgba(56,189,248,0.45)",
+    backgroundColor: colors.accentSoft,
+    borderColor: "rgba(56,189,248,0.22)",
   },
 
   categoryIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 14,
-    backgroundColor: "rgba(255,255,255,0.06)",
+    width: 36,
+    height: 36,
+    borderRadius: 13,
+    backgroundColor: colors.surfaceStrong,
     alignItems: "center",
     justifyContent: "center",
   },
 
   categoryIconActive: {
-    width: 38,
-    height: 38,
-    borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "rgba(56,189,248,0.12)",
   },
 
   categoryText: {
     color: colors.muted,
-    fontWeight: "900",
+    fontWeight: "700",
     fontSize: 13,
   },
 
@@ -384,8 +376,11 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    height: 60,
-    borderRadius: 22,
+    height: 58,
+    borderRadius: 20,
+    backgroundColor: colors.accentSoft,
+    borderWidth: 1,
+    borderColor: "rgba(56,189,248,0.25)",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
@@ -393,8 +388,8 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "900",
+    color: colors.text,
+    fontSize: 15,
+    fontWeight: "800",
   },
 });
