@@ -5,6 +5,13 @@ import Svg, { Circle } from "react-native-svg";
 import ScreenBackground from "../components/ScreenBackground";
 import { colors } from "../theme/colors";
 
+type Props = {
+  onProfilePress?: () => void;
+  onSettingsPress?: () => void;
+  onAddExpensePress?: () => void;
+  onInsightsPress?: () => void;
+};
+
 const monthlyIncome = 30000;
 const totalSpent = 12450;
 const savingGoal = 8000;
@@ -21,12 +28,17 @@ const spendingBreakdown = [
 
 const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 
-export default function HomeScreen() {
+export default function HomeScreen({
+  onProfilePress,
+  onSettingsPress,
+  onAddExpensePress,
+  onInsightsPress,
+}: Props) {
   return (
     <ScreenBackground>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
         <View style={styles.profileHeader}>
-          <TouchableOpacity style={styles.profileArea} activeOpacity={0.85}>
+          <TouchableOpacity style={styles.profileArea} activeOpacity={0.85} onPress={onProfilePress}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>İD</Text>
             </View>
@@ -39,7 +51,7 @@ export default function HomeScreen() {
 
           <View style={styles.headerActions}>
             <HeaderButton icon="notifications-outline" />
-            <HeaderButton icon="settings-outline" />
+            <HeaderButton icon="settings-outline" onPress={onSettingsPress} />
           </View>
         </View>
 
@@ -64,8 +76,8 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.quickMenu}>
-          <Action icon="add-outline" label="Add Expense" active />
-          <Action icon="sparkles-outline" label="Insights" />
+          <Action icon="add-outline" label="Add Expense" active onPress={onAddExpensePress} />
+          <Action icon="sparkles-outline" label="Insights" onPress={onInsightsPress} />
         </View>
 
         <View style={styles.overviewCard}>
@@ -131,9 +143,15 @@ export default function HomeScreen() {
   );
 }
 
-function HeaderButton({ icon }: { icon: keyof typeof Ionicons.glyphMap }) {
+function HeaderButton({
+  icon,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress?: () => void;
+}) {
   return (
-    <TouchableOpacity style={styles.circleButton} activeOpacity={0.8}>
+    <TouchableOpacity style={styles.circleButton} activeOpacity={0.8} onPress={onPress}>
       <Ionicons name={icon} size={19} color={colors.soft} />
     </TouchableOpacity>
   );
@@ -198,13 +216,19 @@ function Action({
   icon,
   label,
   active = false,
+  onPress,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   label: string;
   active?: boolean;
+  onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity style={[styles.actionButton, active && styles.actionButtonActive]} activeOpacity={0.85}>
+    <TouchableOpacity
+      style={[styles.actionButton, active && styles.actionButtonActive]}
+      activeOpacity={0.85}
+      onPress={onPress}
+    >
       <Ionicons name={icon} size={20} color={active ? colors.text : colors.muted} />
       <Text style={[styles.actionText, active && styles.actionTextActive]}>{label}</Text>
     </TouchableOpacity>
