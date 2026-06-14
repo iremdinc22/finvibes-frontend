@@ -24,59 +24,57 @@ export default function GoalsScreen() {
         <Text style={styles.subtitle}>Turn your goal into a clear monthly plan.</Text>
 
         <View style={styles.heroCard}>
-          <View style={styles.heroTop}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.heroLabel}>Active goal</Text>
-              <Text style={styles.goalName}>{goalName}</Text>
-              <Text style={styles.goalDescription}>Save for your next upgrade.</Text>
-            </View>
+          <View style={styles.goalHeader}>
+            <Text style={styles.goalName}>{goalName}</Text>
 
-            <View style={styles.iconCircle}>
-              <Ionicons name="phone-portrait-outline" size={23} color={colors.accent} />
+            <View style={styles.progressPill}>
+              <Text style={styles.progressPillText}>{progress}%</Text>
             </View>
           </View>
 
-          <View style={styles.progressInfoRow}>
-            <View>
-              <Text style={styles.progressPercent}>{progress}%</Text>
-              <Text style={styles.progressCaption}>completed</Text>
-            </View>
-
-            <View style={styles.remainingBox}>
-              <Text style={styles.remainingValue}>{formatMoney(remaining)}</Text>
-              <Text style={styles.remainingLabel}>left</Text>
-            </View>
+          <View style={styles.amountBlock}>
+            <Text style={styles.remainingAmount}>{formatMoney(remaining)}</Text>
+            <Text style={styles.remainingLabel}>left</Text>
           </View>
+
+          <View style={styles.separator} />
 
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${progress}%` }]} />
           </View>
 
-          <View style={styles.progressFooter}>
-            <Text style={styles.progressFooterText}>{formatMoney(currentSaving)} saved</Text>
-            <Text style={styles.progressFooterText}>{formatMoney(targetAmount)} target</Text>
+          <Text style={styles.savedText}>
+            {formatMoney(currentSaving)} / {formatMoney(targetAmount)}
+          </Text>
+
+          <View style={styles.statRow}>
+            <InlineStat icon="calendar-outline" value={`${monthsLeft} months left`} />
+            <InlineStat icon="wallet-outline" value={`${formatMoney(monthlySaving)}/month`} />
           </View>
         </View>
 
-        <View style={styles.grid}>
-          <InfoCard icon="calendar-outline" value={`${monthsLeft} months`} label="Estimated time" />
-          <InfoCard icon="wallet-outline" value={formatMoney(monthlySaving)} label="Monthly saving" />
+        <View style={styles.nextMilestone}>
+          <View style={styles.nextIcon}>
+            <Ionicons name="flag-outline" size={16} color={colors.accent} />
+          </View>
+
+          <View style={{ flex: 1 }}>
+            <Text style={styles.nextTitle}>Next milestone</Text>
+            <Text style={styles.nextText}>
+              Halfway target • {formatMoney(targetAmount / 2 - currentSaving)} to go
+            </Text>
+          </View>
         </View>
 
         <View style={styles.milestoneCard}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>Milestone plan</Text>
-            <Text style={styles.sectionBadge}>{formatMoney(remaining)} left</Text>
+            <Text style={styles.sectionBadge}>{progress}% done</Text>
           </View>
 
-          <Milestone
-            label="Current saving"
-            value={formatMoney(currentSaving)}
-            icon="checkmark"
-            active
-          />
-          <Milestone label="Halfway target" value={formatMoney(targetAmount / 2)} icon="ellipse" />
-          <Milestone label="Final goal" value={formatMoney(targetAmount)} icon="ellipse" last />
+          <Milestone label="Current saving" value="Completed" active />
+          <Milestone label="Halfway target" value={`${formatMoney(targetAmount / 2 - currentSaving)} to go`} />
+          <Milestone label="Final goal" value={`${formatMoney(remaining)} to go`} last />
         </View>
 
         <View style={styles.aiPanel}>
@@ -87,7 +85,7 @@ export default function GoalsScreen() {
           <View style={{ flex: 1 }}>
             <Text style={styles.aiTitle}>Smart suggestion</Text>
             <Text style={styles.aiText}>
-              Saving {formatMoney(monthlySaving)} monthly keeps this goal on track. You can reach it in about {monthsLeft} months.
+              Focus on your halfway target first. Saving {formatMoney(monthlySaving)} monthly keeps your plan realistic and steady.
             </Text>
           </View>
         </View>
@@ -96,23 +94,17 @@ export default function GoalsScreen() {
   );
 }
 
-function InfoCard({
+function InlineStat({
   icon,
   value,
-  label,
 }: {
   icon: keyof typeof Ionicons.glyphMap;
   value: string;
-  label: string;
 }) {
   return (
-    <View style={styles.infoCard}>
-      <View style={styles.infoIcon}>
-        <Ionicons name={icon} size={20} color={colors.accent} />
-      </View>
-
-      <Text style={styles.infoValue}>{value}</Text>
-      <Text style={styles.infoLabel}>{label}</Text>
+    <View style={styles.inlineStat}>
+      <Ionicons name={icon} size={16} color={colors.accent} />
+      <Text style={styles.inlineStatText}>{value}</Text>
     </View>
   );
 }
@@ -120,32 +112,27 @@ function InfoCard({
 function Milestone({
   label,
   value,
-  icon,
   active = false,
   last = false,
 }: {
   label: string;
   value: string;
-  icon: keyof typeof Ionicons.glyphMap;
   active?: boolean;
   last?: boolean;
 }) {
   return (
     <View style={[styles.milestoneItem, last && styles.milestoneItemLast]}>
-      <View style={[styles.milestoneIcon, active && styles.milestoneIconActive]}>
-        <Ionicons
-          name={icon}
-          size={active ? 15 : 9}
-          color={active ? colors.text : colors.faint}
-        />
+      <View style={[styles.statusDot, active && styles.statusDotActive]}>
+        {active && <Ionicons name="checkmark" size={13} color={colors.text} />}
       </View>
 
-      <View style={{ flex: 1 }}>
-        <Text style={[styles.milestoneLabel, active && styles.milestoneLabelActive]}>
-          {label}
-        </Text>
-        <Text style={styles.milestoneValue}>{value}</Text>
-      </View>
+      <Text style={[styles.milestoneLabel, active && styles.milestoneLabelActive]}>
+        {label}
+      </Text>
+
+      <Text style={[styles.milestoneValue, active && styles.milestoneValueActive]}>
+        {value}
+      </Text>
     </View>
   );
 }
@@ -185,89 +172,66 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
     borderRadius: 30,
     padding: 22,
-    marginBottom: 16,
+    marginBottom: 14,
   },
 
-  heroTop: {
+  goalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    gap: 14,
-  },
-
-  heroLabel: {
-    color: colors.muted,
-    fontSize: 13,
-    fontWeight: "700",
-    marginBottom: 8,
+    alignItems: "center",
   },
 
   goalName: {
     color: colors.text,
-    fontSize: 31,
+    fontSize: 24,
     fontWeight: "800",
-    letterSpacing: -1,
+    letterSpacing: -0.6,
   },
 
-  goalDescription: {
-    color: colors.faint,
-    fontSize: 13,
-    fontWeight: "600",
-    marginTop: 7,
-  },
-
-  iconCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: 18,
+  progressPill: {
     backgroundColor: colors.accentSoft,
     borderWidth: 1,
-    borderColor: "rgba(56,189,248,0.20)",
-    alignItems: "center",
-    justifyContent: "center",
+    borderColor: "rgba(56,189,248,0.22)",
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
 
-  progressInfoRow: {
-    marginTop: 26,
-    marginBottom: 13,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-  },
-
-  progressPercent: {
+  progressPillText: {
     color: colors.text,
-    fontSize: 40,
-    fontWeight: "800",
-    letterSpacing: -1.4,
-  },
-
-  progressCaption: {
-    color: colors.muted,
     fontSize: 13,
-    fontWeight: "600",
-    marginTop: -2,
-  },
-
-  remainingBox: {
-    alignItems: "flex-end",
-  },
-
-  remainingValue: {
-    color: colors.accent,
-    fontSize: 15,
     fontWeight: "800",
+  },
+
+  amountBlock: {
+    marginTop: 26,
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 7,
+  },
+
+  remainingAmount: {
+    color: colors.text,
+    fontSize: 34,
+    fontWeight: "700",
+    letterSpacing: -1.2,
   },
 
   remainingLabel: {
-    color: colors.faint,
-    fontSize: 12,
+    color: colors.muted,
+    fontSize: 14,
     fontWeight: "600",
-    marginTop: 4,
+  },
+
+  separator: {
+    height: 1,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    marginTop: 18,
+    marginBottom: 18,
   },
 
   progressTrack: {
-    height: 13,
+    height: 12,
     borderRadius: 999,
     backgroundColor: "rgba(255,255,255,0.08)",
     borderWidth: 1,
@@ -281,54 +245,64 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
   },
 
-  progressFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 11,
-  },
-
-  progressFooterText: {
+  savedText: {
     color: colors.faint,
     fontSize: 12,
     fontWeight: "600",
+    marginTop: 11,
   },
 
-  grid: {
+  statRow: {
+    marginTop: 18,
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
+    justifyContent: "space-between",
+    gap: 10,
   },
 
-  infoCard: {
-    flex: 1,
-    backgroundColor: colors.surface,
+  inlineStat: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+  },
+
+  inlineStatText: {
+    color: colors.soft,
+    fontSize: 12,
+    fontWeight: "700",
+  },
+
+  nextMilestone: {
+    backgroundColor: "rgba(56,189,248,0.075)",
     borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 24,
-    padding: 16,
+    borderColor: "rgba(56,189,248,0.16)",
+    borderRadius: 22,
+    padding: 15,
+    marginBottom: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
   },
 
-  infoIcon: {
-    width: 40,
-    height: 40,
+  nextIcon: {
+    width: 38,
+    height: 38,
     borderRadius: 14,
     backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 14,
   },
 
-  infoValue: {
+  nextTitle: {
     color: colors.text,
-    fontSize: 17,
+    fontSize: 14,
     fontWeight: "800",
-    marginBottom: 5,
   },
 
-  infoLabel: {
+  nextText: {
     color: colors.muted,
     fontSize: 12,
     fontWeight: "600",
+    marginTop: 4,
   },
 
   milestoneCard: {
@@ -344,7 +318,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 16,
+    marginBottom: 10,
   },
 
   sectionTitle: {
@@ -362,8 +336,7 @@ const styles = StyleSheet.create({
   milestoneItem: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 13,
-    paddingVertical: 13,
+    paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255,255,255,0.06)",
   },
@@ -372,26 +345,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
   },
 
-  milestoneIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 12,
+  statusDot: {
+    width: 28,
+    height: 28,
+    borderRadius: 11,
     backgroundColor: "rgba(255,255,255,0.055)",
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.08)",
     alignItems: "center",
     justifyContent: "center",
+    marginRight: 12,
   },
 
-  milestoneIconActive: {
+  statusDotActive: {
     backgroundColor: colors.accentSoft,
     borderColor: "rgba(56,189,248,0.25)",
   },
 
   milestoneLabel: {
+    flex: 1,
     color: colors.muted,
+    fontSize: 14,
     fontWeight: "700",
-    fontSize: 13,
   },
 
   milestoneLabelActive: {
@@ -399,9 +374,13 @@ const styles = StyleSheet.create({
   },
 
   milestoneValue: {
-    color: colors.text,
-    fontWeight: "800",
-    marginTop: 4,
+    color: colors.soft,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  milestoneValueActive: {
+    color: colors.accent,
   },
 
   aiPanel: {
