@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 
 import HomeScreen from "../screens/HomeScreen";
+import AddExpenseScreen from "../screens/AddExpenseScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
 import GoalsScreen from "../screens/GoalsScreen";
 import InsightsScreen from "../screens/InsightsScreen";
@@ -54,6 +55,7 @@ function BottomTabs({ navigation }: any) {
       <Tab.Screen name="Home">
         {() => (
           <HomeScreen
+            onAddExpensePress={() => navigation.navigate("AddExpense")}
             onProfilePress={() => navigation.navigate("Profile")}
             onSettingsPress={() => navigation.navigate("Settings")}
           />
@@ -76,6 +78,8 @@ export default function AppNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="MainTabs" component={BottomTabs} />
 
+        <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
+
         <Stack.Screen name="Profile">
           {(props) => (
             <ProfileScreen
@@ -87,9 +91,7 @@ export default function AppNavigator() {
 
         <Stack.Screen name="Settings">
           {(props) => (
-            <SettingsScreen
-              onBackPress={() => props.navigation.goBack()}
-            />
+            <SettingsScreen onBackPress={() => props.navigation.goBack()} />
           )}
         </Stack.Screen>
       </Stack.Navigator>
