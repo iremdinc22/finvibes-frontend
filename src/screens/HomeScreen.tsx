@@ -22,9 +22,15 @@ const budgetUsed = Math.round((totalSpent / monthlyIncome) * 100);
 const spendingBreakdown = [
   { label: "Lifestyle", value: 42, color: colors.accent },
   { label: "Savings", value: 28, color: colors.purple },
-  { label: "Bills", value: 18, color: "#334155" },
-  { label: "Other", value: 12, color: "#1E293B" },
+  { label: "Bills", value: 18, color: "#60A5FA" },
+  { label: "Other", value: 12, color: "#475569" },
 ];
+
+const transactions = [
+  { icon: "fast-food-outline", title: "Food & Dining", time: "Today, 2:20 PM", amount: "-420 TL" },
+  { icon: "cart-outline", title: "Shopping", time: "Yesterday, 6:45 PM", amount: "-1,250 TL" },
+  { icon: "bus-outline", title: "Transport", time: "Monday, 9:15 AM", amount: "-95 TL" },
+] as const;
 
 const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 
@@ -37,113 +43,117 @@ export default function HomeScreen({
   return (
     <ScreenBackground>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
-        <View style={styles.profileHeader}>
-          <TouchableOpacity style={styles.profileArea} activeOpacity={0.85} onPress={onProfilePress}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.profile} activeOpacity={0.85} onPress={onProfilePress}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>İD</Text>
             </View>
 
-            <View>
-              <Text style={styles.welcomeText}>Welcome back</Text>
+            <View style={styles.profileText}>
+              <Text style={styles.eyebrow}>Good evening</Text>
               <Text style={styles.userName}>İrem Dinç</Text>
             </View>
           </TouchableOpacity>
 
           <View style={styles.headerActions}>
-            <HeaderButton icon="notifications-outline" />
-            <HeaderButton icon="settings-outline" onPress={onSettingsPress} />
+            <IconButton icon="notifications-outline" />
+            <IconButton icon="settings-outline" onPress={onSettingsPress} />
           </View>
         </View>
 
-        <View style={styles.balanceCard}>
-          <View style={styles.balanceTop}>
+        <View style={styles.heroCard}>
+          <View style={styles.heroTop}>
             <View>
-              <Text style={styles.cardLabel}>Available Balance</Text>
+              <Text style={styles.cardLabel}>Available balance</Text>
               <Text style={styles.balance}>{formatMoney(remaining)}</Text>
             </View>
 
-            <View style={styles.growthBadge}>
+            <View style={styles.healthBadge}>
               <Ionicons name="trending-up" size={14} color={colors.green} />
-              <Text style={styles.growthText}>12.4%</Text>
+              <Text style={styles.healthText}>Healthy</Text>
             </View>
           </View>
 
-          <View style={styles.metaRow}>
-            <MiniMetric label="Income" value={formatMoney(monthlyIncome)} />
-            <View style={styles.divider} />
-            <MiniMetric label="Spent" value={formatMoney(totalSpent)} />
+          <View style={styles.progressTrack}>
+            <View style={[styles.progressFill, { width: `${budgetUsed}%` }]} />
+          </View>
+
+          <View style={styles.heroStats}>
+            <Metric label="Income" value={formatMoney(monthlyIncome)} />
+            <Metric label="Spent" value={formatMoney(totalSpent)} align="right" />
           </View>
         </View>
 
-        <View style={styles.quickMenu}>
-          <Action icon="add-outline" label="Add Expense" active onPress={onAddExpensePress} />
+        <View style={styles.actions}>
+          <Action icon="add-outline" label="Add" active onPress={onAddExpensePress} />
           <Action icon="sparkles-outline" label="Insights" onPress={onInsightsPress} />
+          <Action icon="pie-chart-outline" label="Budget" />
         </View>
 
-        <View style={styles.overviewCard}>
-          <View style={styles.cardTop}>
-            <View>
-              <Text style={styles.cardTitle}>Monthly Overview</Text>
-              <Text style={styles.cardSub}>{budgetUsed}% of monthly income used</Text>
-            </View>
-
-            <View style={styles.monthBadge}>
-              <Text style={styles.monthText}>Month</Text>
-            </View>
+        <View style={styles.sectionTitleRow}>
+          <View>
+            <Text style={styles.sectionTitle}>Monthly overview</Text>
+            <Text style={styles.sectionHint}>{budgetUsed}% of income used</Text>
           </View>
+          <TouchableOpacity activeOpacity={0.8} style={styles.monthButton}>
+            <Text style={styles.monthText}>June</Text>
+            <Ionicons name="chevron-down" size={14} color={colors.soft} />
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.chartArea}>
+        <View style={styles.overview}>
+          <View style={styles.chartWrap}>
             <DonutChart />
-
             <View style={styles.chartCenter}>
               <Text style={styles.chartPercent}>{budgetUsed}%</Text>
-              <Text style={styles.chartLabel}>budget used</Text>
+              <Text style={styles.chartLabel}>used</Text>
             </View>
           </View>
 
-          <View style={styles.summaryPanel}>
-            <MiniMetric label="Spent" value={formatMoney(totalSpent)} />
-            <View style={styles.divider} />
-            <MiniMetric label="Savings goal" value={formatMoney(savingGoal)} />
-          </View>
-
-          <View style={styles.legendRow}>
-            {spendingBreakdown.slice(0, 3).map((item) => (
-              <View style={styles.legendItem} key={item.label}>
-                <View style={[styles.dot, { backgroundColor: item.color }]} />
-                <Text style={styles.legendText}>{item.label}</Text>
+          <View style={styles.categoryList}>
+            {spendingBreakdown.map((item) => (
+              <View key={item.label} style={styles.categoryItem}>
+                <View style={[styles.categoryDot, { backgroundColor: item.color }]} />
+                <Text style={styles.categoryLabel}>{item.label}</Text>
+                <Text style={styles.categoryValue}>{item.value}%</Text>
               </View>
             ))}
           </View>
         </View>
 
-        <View style={styles.aiPanel}>
-          <View style={styles.aiIcon}>
-            <Ionicons name="sparkles-outline" size={20} color={colors.accent} />
+        <TouchableOpacity style={styles.insightCard} activeOpacity={0.85} onPress={onInsightsPress}>
+          <View style={styles.insightIcon}>
+            <Ionicons name="sparkles-outline" size={18} color={colors.accent} />
           </View>
 
-          <View style={{ flex: 1 }}>
-            <Text style={styles.aiTitle}>AI detected a trend</Text>
-            <Text style={styles.aiText}>
-              Shopping is trending upward. Reducing small purchases this week can help protect your savings goal.
+          <View style={styles.insightBody}>
+            <Text style={styles.insightTitle}>Shopping is rising</Text>
+            <Text style={styles.insightText}>
+              Small purchase frequency increased this week. Try setting a daily cap to protect your {formatMoney(savingGoal)} goal.
             </Text>
           </View>
+
+          <Ionicons name="chevron-forward" size={18} color={colors.faint} />
+        </TouchableOpacity>
+
+        <View style={styles.sectionTitleRow}>
+          <Text style={styles.sectionTitle}>Recent activity</Text>
+          <TouchableOpacity activeOpacity={0.8}>
+            <Text style={styles.linkText}>View all</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Latest Transactions</Text>
-          <Text style={styles.viewAll}>View All</Text>
+        <View style={styles.transactionList}>
+          {transactions.map((transaction) => (
+            <Transaction key={`${transaction.title}-${transaction.time}`} {...transaction} />
+          ))}
         </View>
-
-        <Transaction icon="fast-food-outline" title="Food & Dining" time="Today • 2:20 PM" amount="-420 TL" />
-        <Transaction icon="cart-outline" title="Shopping" time="Yesterday • 6:45 PM" amount="-1,250 TL" />
-        <Transaction icon="bus-outline" title="Transport" time="Monday • 9:15 AM" amount="-95 TL" />
       </ScrollView>
     </ScreenBackground>
   );
 }
 
-function HeaderButton({
+function IconButton({
   icon,
   onPress,
 }: {
@@ -151,15 +161,23 @@ function HeaderButton({
   onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity style={styles.circleButton} activeOpacity={0.8} onPress={onPress}>
+    <TouchableOpacity style={styles.iconButton} activeOpacity={0.8} onPress={onPress}>
       <Ionicons name={icon} size={19} color={colors.soft} />
     </TouchableOpacity>
   );
 }
 
-function MiniMetric({ label, value }: { label: string; value: string }) {
+function Metric({
+  label,
+  value,
+  align = "left",
+}: {
+  label: string;
+  value: string;
+  align?: "left" | "right";
+}) {
   return (
-    <View style={styles.metric}>
+    <View style={[styles.metric, align === "right" && styles.metricRight]}>
       <Text style={styles.metricLabel}>{label}</Text>
       <Text style={styles.metricValue}>{value}</Text>
     </View>
@@ -167,11 +185,11 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
 }
 
 function DonutChart() {
-  const size = 204;
-  const strokeWidth = 24;
+  const size = 154;
+  const strokeWidth = 18;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const gap = 8;
+  const gap = 7;
   let accumulated = 0;
 
   return (
@@ -180,13 +198,13 @@ function DonutChart() {
         cx={size / 2}
         cy={size / 2}
         r={radius}
-        stroke="rgba(255,255,255,0.08)"
+        stroke="rgba(255,255,255,0.075)"
         strokeWidth={strokeWidth}
         fill="none"
       />
 
       {spendingBreakdown.map((item) => {
-        const segmentLength = (item.value / 100) * circumference - gap;
+        const segmentLength = Math.max((item.value / 100) * circumference - gap, 0);
         const offset = -((accumulated / 100) * circumference);
         accumulated += item.value;
 
@@ -224,12 +242,8 @@ function Action({
   onPress?: () => void;
 }) {
   return (
-    <TouchableOpacity
-      style={[styles.actionButton, active && styles.actionButtonActive]}
-      activeOpacity={0.85}
-      onPress={onPress}
-    >
-      <Ionicons name={icon} size={20} color={active ? colors.text : colors.muted} />
+    <TouchableOpacity style={[styles.action, active && styles.actionActive]} activeOpacity={0.85} onPress={onPress}>
+      <Ionicons name={icon} size={19} color={active ? colors.text : colors.soft} />
       <Text style={[styles.actionText, active && styles.actionTextActive]}>{label}</Text>
     </TouchableOpacity>
   );
@@ -247,49 +261,51 @@ function Transaction({
   amount: string;
 }) {
   return (
-    <View style={styles.transactionCard}>
-      <View style={styles.transactionLeft}>
-        <View style={styles.transactionIcon}>
-          <Ionicons name={icon} size={20} color={colors.accent} />
-        </View>
+    <TouchableOpacity style={styles.transaction} activeOpacity={0.82}>
+      <View style={styles.transactionIcon}>
+        <Ionicons name={icon} size={19} color={colors.accent} />
+      </View>
 
-        <View style={{ flex: 1 }}>
-          <Text style={styles.transactionTitle}>{title}</Text>
-          <Text style={styles.transactionTime}>{time}</Text>
-        </View>
+      <View style={styles.transactionBody}>
+        <Text style={styles.transactionTitle}>{title}</Text>
+        <Text style={styles.transactionTime}>{time}</Text>
       </View>
 
       <Text style={styles.transactionAmount}>{amount}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 22,
+    paddingHorizontal: 20,
     paddingTop: 58,
-    paddingBottom: 130,
+    paddingBottom: 120,
   },
 
-  profileHeader: {
+  header: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
+    marginBottom: 22,
   },
 
-  profileArea: {
+  profile: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: 13,
+    gap: 12,
+  },
+
+  profileText: {
     flex: 1,
   },
 
   avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 18,
-    backgroundColor: colors.surfaceStrong,
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.08)",
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: "center",
@@ -298,14 +314,14 @@ const styles = StyleSheet.create({
 
   avatarText: {
     color: colors.text,
+    fontSize: 15,
     fontWeight: "800",
-    fontSize: 16,
   },
 
-  welcomeText: {
+  eyebrow: {
     color: colors.muted,
-    fontSize: 13,
-    fontWeight: "600",
+    fontSize: 12,
+    fontWeight: "700",
     marginBottom: 4,
   },
 
@@ -317,79 +333,93 @@ const styles = StyleSheet.create({
 
   headerActions: {
     flexDirection: "row",
-    gap: 10,
+    gap: 9,
   },
 
-  circleButton: {
+  iconButton: {
     width: 42,
     height: 42,
-    borderRadius: 999,
-    backgroundColor: colors.surface,
+    borderRadius: 16,
+    backgroundColor: "rgba(255,255,255,0.065)",
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: "center",
     justifyContent: "center",
   },
 
-  balanceCard: {
-    backgroundColor: colors.surface,
+  heroCard: {
+    backgroundColor: "rgba(15,23,42,0.78)",
     borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 28,
-    padding: 22,
-    marginBottom: 16,
+    borderColor: colors.borderStrong,
+    borderRadius: 24,
+    padding: 20,
+    marginBottom: 14,
   },
 
-  balanceTop: {
+  heroTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    gap: 14,
   },
 
   cardLabel: {
     color: colors.muted,
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "700",
-    marginBottom: 10,
+    marginBottom: 9,
   },
 
   balance: {
     color: colors.text,
-    fontSize: 42,
-    fontWeight: "300",
-    letterSpacing: -1.8,
+    fontSize: 36,
+    fontWeight: "700",
   },
 
-  growthBadge: {
-    backgroundColor: "rgba(34,197,94,0.10)",
-    borderWidth: 1,
-    borderColor: "rgba(34,197,94,0.22)",
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+  healthBadge: {
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 999,
+    backgroundColor: "rgba(34,197,94,0.1)",
+    borderWidth: 1,
+    borderColor: "rgba(34,197,94,0.2)",
   },
 
-  growthText: {
+  healthText: {
     color: colors.green,
     fontSize: 12,
     fontWeight: "800",
   },
 
-  metaRow: {
-    marginTop: 18,
-    backgroundColor: "rgba(2,6,23,0.35)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.06)",
-    borderRadius: 20,
-    padding: 15,
+  progressTrack: {
+    height: 8,
+    overflow: "hidden",
+    borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.08)",
+    marginTop: 22,
+    marginBottom: 17,
+  },
+
+  progressFill: {
+    height: "100%",
+    borderRadius: 999,
+    backgroundColor: colors.accent,
+  },
+
+  heroStats: {
     flexDirection: "row",
+    justifyContent: "space-between",
   },
 
   metric: {
     flex: 1,
+  },
+
+  metricRight: {
+    alignItems: "flex-end",
   },
 
   metricLabel: {
@@ -400,100 +430,100 @@ const styles = StyleSheet.create({
   },
 
   metricValue: {
-    color: colors.text,
+    color: colors.soft,
     fontSize: 14,
     fontWeight: "800",
   },
 
-  divider: {
-    width: 1,
-    backgroundColor: "rgba(255,255,255,0.08)",
-    marginHorizontal: 12,
-  },
-
-  quickMenu: {
+  actions: {
     flexDirection: "row",
-    gap: 12,
-    marginBottom: 16,
+    gap: 10,
+    marginBottom: 24,
   },
 
-  actionButton: {
+  action: {
     flex: 1,
-    height: 54,
-    borderRadius: 20,
-    backgroundColor: colors.surface,
+    minHeight: 50,
+    borderRadius: 18,
+    backgroundColor: "rgba(255,255,255,0.06)",
     borderWidth: 1,
     borderColor: colors.border,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    gap: 7,
   },
 
-  actionButtonActive: {
+  actionActive: {
     backgroundColor: colors.accentSoft,
     borderColor: "rgba(56,189,248,0.24)",
   },
 
   actionText: {
-    color: colors.muted,
+    color: colors.soft,
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: "800",
   },
 
   actionTextActive: {
     color: colors.text,
   },
 
-  overviewCard: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 28,
-    padding: 22,
-    marginBottom: 16,
-  },
-
-  cardTop: {
+  sectionTitleRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 12,
+    alignItems: "center",
+    marginBottom: 13,
   },
 
-  cardTitle: {
+  sectionTitle: {
     color: colors.text,
+    fontSize: 18,
     fontWeight: "800",
-    fontSize: 17,
   },
 
-  cardSub: {
+  sectionHint: {
     color: colors.muted,
-    marginTop: 6,
-    fontWeight: "600",
-    fontSize: 13,
+    fontSize: 12,
+    fontWeight: "700",
+    marginTop: 4,
   },
 
-  monthBadge: {
-    backgroundColor: colors.surfaceStrong,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: 12,
+  monthButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 11,
     paddingVertical: 8,
     borderRadius: 999,
+    backgroundColor: "rgba(255,255,255,0.06)",
+    borderWidth: 1,
+    borderColor: colors.border,
   },
 
   monthText: {
     color: colors.soft,
-    fontWeight: "700",
     fontSize: 12,
+    fontWeight: "800",
   },
 
-  chartArea: {
+  overview: {
+    backgroundColor: "rgba(255,255,255,0.055)",
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 24,
+    padding: 18,
+    marginBottom: 14,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 17,
+  },
+
+  chartWrap: {
+    width: 154,
+    height: 154,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 8,
-    marginBottom: 14,
   },
 
   chartCenter: {
@@ -503,150 +533,137 @@ const styles = StyleSheet.create({
 
   chartPercent: {
     color: colors.text,
-    fontSize: 38,
+    fontSize: 30,
     fontWeight: "800",
-    letterSpacing: -1.2,
   },
 
   chartLabel: {
     color: colors.muted,
-    fontSize: 13,
-    fontWeight: "600",
-    marginTop: 2,
-  },
-
-  summaryPanel: {
-    backgroundColor: "rgba(2,6,23,0.35)",
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.06)",
-    borderRadius: 20,
-    padding: 15,
-    flexDirection: "row",
-    marginBottom: 14,
-  },
-
-  legendRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 16,
-  },
-
-  legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 7,
-  },
-
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 99,
-  },
-
-  legendText: {
-    color: colors.muted,
     fontSize: 12,
-    fontWeight: "600",
-  },
-
-  aiPanel: {
-    marginBottom: 24,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 24,
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 13,
-  },
-
-  aiIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 15,
-    backgroundColor: colors.accentSoft,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  aiTitle: {
-    color: colors.text,
-    fontWeight: "800",
-    fontSize: 15,
-  },
-
-  aiText: {
-    color: colors.muted,
-    lineHeight: 20,
-    marginTop: 5,
-    fontSize: 13,
-    fontWeight: "600",
-  },
-
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 14,
-  },
-
-  sectionTitle: {
-    color: colors.text,
-    fontSize: 19,
-    fontWeight: "800",
-  },
-
-  viewAll: {
-    color: colors.accent,
     fontWeight: "700",
-    fontSize: 13,
+    marginTop: 1,
   },
 
-  transactionCard: {
-    backgroundColor: colors.surface,
+  categoryList: {
+    flex: 1,
+    gap: 11,
+  },
+
+  categoryItem: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  categoryDot: {
+    width: 9,
+    height: 9,
+    borderRadius: 99,
+    marginRight: 8,
+  },
+
+  categoryLabel: {
+    flex: 1,
+    color: colors.soft,
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  categoryValue: {
+    color: colors.text,
+    fontSize: 13,
+    fontWeight: "800",
+  },
+
+  insightCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: "rgba(56,189,248,0.075)",
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: "rgba(56,189,248,0.16)",
     borderRadius: 22,
     padding: 15,
-    marginBottom: 11,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    marginBottom: 24,
   },
 
-  transactionLeft: {
-    flexDirection: "row",
+  insightIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 14,
     alignItems: "center",
-    gap: 13,
+    justifyContent: "center",
+    backgroundColor: "rgba(56,189,248,0.12)",
+  },
+
+  insightBody: {
     flex: 1,
   },
 
+  insightTitle: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: "800",
+    marginBottom: 4,
+  },
+
+  insightText: {
+    color: colors.muted,
+    fontSize: 12,
+    fontWeight: "600",
+    lineHeight: 18,
+  },
+
+  linkText: {
+    color: colors.accent,
+    fontSize: 13,
+    fontWeight: "800",
+  },
+
+  transactionList: {
+    gap: 10,
+  },
+
+  transaction: {
+    minHeight: 68,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    backgroundColor: "rgba(255,255,255,0.055)",
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 20,
+    padding: 14,
+  },
+
   transactionIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 14,
     backgroundColor: colors.accentSoft,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  transactionBody: {
+    flex: 1,
   },
 
   transactionTitle: {
     color: colors.text,
-    fontWeight: "700",
-    fontSize: 15,
+    fontSize: 14,
+    fontWeight: "800",
   },
 
   transactionTime: {
     color: colors.faint,
-    marginTop: 4,
     fontSize: 12,
     fontWeight: "600",
+    marginTop: 4,
   },
 
   transactionAmount: {
     color: colors.soft,
+    fontSize: 14,
     fontWeight: "800",
-    fontSize: 15,
   },
 });
