@@ -13,6 +13,7 @@ import InsightsScreen from "../screens/InsightsScreen";
 import AICoachScreen from "../screens/AICoachScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import SettingsScreen from "../screens/SettingsScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -57,6 +58,7 @@ function BottomTabs({ navigation }: any) {
             onAddExpensePress={() => navigation.navigate("AddExpense")}
             onProfilePress={() => navigation.navigate("Profile")}
             onSettingsPress={() => navigation.navigate("Settings")}
+            onNotificationsPress={() => navigation.navigate("Notifications")}
             onInsightsPress={() => navigation.navigate("Insights")}
             onBudgetPress={() => navigation.navigate("Budget")}
           />
@@ -121,6 +123,12 @@ export default function AppNavigator() {
         <Stack.Screen name="Settings">
           {(props) => (
             <SettingsScreen onBackPress={() => props.navigation.goBack()} />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="Notifications">
+          {(props) => (
+            <NotificationsScreen onBackPress={() => props.navigation.goBack()} />
           )}
         </Stack.Screen>
       </Stack.Navigator>

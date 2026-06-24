@@ -7,6 +7,7 @@ import { colors } from "../theme/colors";
 
 type Props = {
   onBackPress?: () => void;
+  onHomePress?: () => void;
 };
 
 type Period = "Week" | "Month";

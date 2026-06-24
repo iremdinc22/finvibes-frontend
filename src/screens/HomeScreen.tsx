@@ -8,6 +8,7 @@ import { colors } from "../theme/colors";
 type Props = {
   onProfilePress?: () => void;
   onSettingsPress?: () => void;
+  onNotificationsPress?: () => void;
   onAddExpensePress?: () => void;
   onInsightsPress?: () => void;
   onBudgetPress?: () => void;
@@ -38,6 +39,7 @@ const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 export default function HomeScreen({
   onProfilePress,
   onSettingsPress,
+  onNotificationsPress,
   onAddExpensePress,
   onInsightsPress,
   onBudgetPress,
@@ -58,7 +60,7 @@ export default function HomeScreen({
           </TouchableOpacity>
 
           <View style={styles.headerActions}>
-            <IconButton icon="notifications-outline" />
+            <IconButton icon="notifications-outline" onPress={onNotificationsPress} />
             <IconButton icon="settings-outline" onPress={onSettingsPress} />
           </View>
         </View>
