@@ -10,6 +10,7 @@ type Props = {
   onSettingsPress?: () => void;
   onAddExpensePress?: () => void;
   onInsightsPress?: () => void;
+  onBudgetPress?: () => void;
 };
 
 const monthlyIncome = 30000;
@@ -39,6 +40,7 @@ export default function HomeScreen({
   onSettingsPress,
   onAddExpensePress,
   onInsightsPress,
+  onBudgetPress,
 }: Props) {
   return (
     <ScreenBackground>
@@ -87,7 +89,7 @@ export default function HomeScreen({
         <View style={styles.actions}>
           <Action icon="add-outline" label="Add" active onPress={onAddExpensePress} />
           <Action icon="sparkles-outline" label="Insights" onPress={onInsightsPress} />
-          <Action icon="pie-chart-outline" label="Budget" />
+          <Action icon="pie-chart-outline" label="Budget" onPress={onBudgetPress} />
         </View>
 
         <View style={styles.sectionTitleRow}>

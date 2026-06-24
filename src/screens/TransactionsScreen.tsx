@@ -8,6 +8,10 @@ import { Expense, ExpenseCategory } from "../types/finance";
 
 type FilterType = "Today" | "Week" | "Month";
 
+type Props = {
+  onTransactionPress?: () => void;
+};
+
 const monthlyIncome = 30000;
 
 const transactionsByFilter: Record<FilterType, Expense[]> = {
@@ -60,7 +64,7 @@ const iconMap: Record<ExpenseCategory, keyof typeof Ionicons.glyphMap> = {
 
 const formatMoney = (value: number) => `${value.toLocaleString("en-US")} TL`;
 
-export default function TransactionsScreen() {
+export default function TransactionsScreen({ onTransactionPress }: Props) {
   const [selectedFilter, setSelectedFilter] = useState<FilterType>("Today");
 
   const expenses = transactionsByFilter[selectedFilter];
@@ -149,7 +153,7 @@ export default function TransactionsScreen() {
             </View>
           </>
         }
-        renderItem={({ item }) => <TransactionRow item={item} />}
+        renderItem={({ item }) => <TransactionRow item={item} onPress={onTransactionPress} />}
       />
     </ScreenBackground>
   );
@@ -206,9 +210,15 @@ function SummaryMetric({
   );
 }
 
-function TransactionRow({ item }: { item: Expense }) {
+function TransactionRow({
+  item,
+  onPress,
+}: {
+  item: Expense;
+  onPress?: () => void;
+}) {
   return (
-    <TouchableOpacity activeOpacity={0.86} style={styles.transactionCard}>
+    <TouchableOpacity activeOpacity={0.86} style={styles.transactionCard} onPress={onPress}>
       <View style={styles.iconBox}>
         <Ionicons name={iconMap[item.category]} size={19} color={colors.accent} />
       </View>

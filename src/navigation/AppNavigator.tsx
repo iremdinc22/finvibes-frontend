@@ -6,6 +6,8 @@ import { StatusBar } from "expo-status-bar";
 import HomeScreen from "../screens/HomeScreen";
 import AddExpenseScreen from "../screens/AddExpenseScreen";
 import TransactionsScreen from "../screens/TransactionsScreen";
+import TransactionDetailScreen from "../screens/TransactionDetailScreen";
+import BudgetScreen from "../screens/BudgetScreen";
 import GoalsScreen from "../screens/GoalsScreen";
 import InsightsScreen from "../screens/InsightsScreen";
 import AICoachScreen from "../screens/AICoachScreen";
@@ -23,7 +25,6 @@ function BottomTabs({ navigation }: any) {
         tabBarActiveTintColor: "#38BDF8",
         tabBarInactiveTintColor: "#64748B",
         tabBarHideOnKeyboard: true,
-
         tabBarStyle: {
           backgroundColor: "#070A13",
           borderTopWidth: 0,
@@ -33,12 +34,10 @@ function BottomTabs({ navigation }: any) {
           elevation: 0,
           shadowOpacity: 0,
         },
-
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "800",
         },
-
         tabBarIcon: ({ color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap = "home";
 
@@ -58,11 +57,20 @@ function BottomTabs({ navigation }: any) {
             onAddExpensePress={() => navigation.navigate("AddExpense")}
             onProfilePress={() => navigation.navigate("Profile")}
             onSettingsPress={() => navigation.navigate("Settings")}
+            onInsightsPress={() => navigation.navigate("Insights")}
+            onBudgetPress={() => navigation.navigate("Budget")}
           />
         )}
       </Tab.Screen>
 
-      <Tab.Screen name="History" component={TransactionsScreen} />
+      <Tab.Screen name="History">
+        {() => (
+          <TransactionsScreen
+            onTransactionPress={() => navigation.navigate("TransactionDetail")}
+          />
+        )}
+      </Tab.Screen>
+
       <Tab.Screen name="Goals" component={GoalsScreen} />
       <Tab.Screen name="Insights" component={InsightsScreen} />
       <Tab.Screen name="Coach" component={AICoachScreen} />
@@ -78,7 +86,28 @@ export default function AppNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="MainTabs" component={BottomTabs} />
 
-        <Stack.Screen name="AddExpense" component={AddExpenseScreen} />
+        <Stack.Screen name="AddExpense">
+          {(props) => (
+            <AddExpenseScreen onBackPress={() => props.navigation.goBack()} />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="Budget">
+          {(props) => (
+            <BudgetScreen
+              onBackPress={() => props.navigation.goBack()}
+              onHomePress={() => props.navigation.navigate("MainTabs", { screen: "Home" })}
+            />
+          )}
+        </Stack.Screen>
+
+        <Stack.Screen name="TransactionDetail">
+          {(props) => (
+            <TransactionDetailScreen
+              onBackPress={() => props.navigation.goBack()}
+            />
+          )}
+        </Stack.Screen>
 
         <Stack.Screen name="Profile">
           {(props) => (
