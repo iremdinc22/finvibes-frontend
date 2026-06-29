@@ -70,17 +70,27 @@ The project consists of:
 
 <div align="center">
 
-<img src="assets/screenshots/HomeScreen.png" width="180">
-<img src="assets/screenshots/BudgetScreen.png" width="180">
-<img src="assets/screenshots/GoalScreen.png" width="180">
+### 🏠 Home & Budget
 
-</div>
+<img src="assets/screenshots/HomeScreen.png" width="180" />
+&nbsp;&nbsp;&nbsp;
+<img src="assets/screenshots/BudgetScreen.png" width="180" />
 
-<div align="center">
+<br><br>
 
-<img src="assets/screenshots/InsightsScreen.png" width="180">
-<img src="assets/screenshots/AICoachScreen.png" width="180">
-<img src="assets/screenshots/TransactionScreen.png" width="180">
+### 🎯 Goals & Insights
+
+<img src="assets/screenshots/GoalScreen.png" width="180" />
+&nbsp;&nbsp;&nbsp;
+<img src="assets/screenshots/InsightsScreen.png" width="180" />
+
+<br><br>
+
+### 🤖 AI Coach & Transactions
+
+<img src="assets/screenshots/AICoachScreen.png" width="180" />
+&nbsp;&nbsp;&nbsp;
+<img src="assets/screenshots/TransactionScreen.png" width="180" />
 
 </div>
 
