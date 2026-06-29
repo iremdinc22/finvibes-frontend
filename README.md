@@ -66,17 +66,24 @@ The project consists of:
 
 ---
 
-# 🖼️ Screens
+# 📱 Application Screens
 
-| Home | Transactions | Goals |
-|------|-------------|--------|
-| Screenshot | Screenshot | Screenshot |
+<div align="center">
 
-| Add Expense | Insights | Profile |
-|------------|----------|---------|
-| Screenshot | Screenshot | Screenshot |
+<img src="assets/screenshots/HomeScreen.png" width="180">
+<img src="assets/screenshots/BudgetScreen.png" width="180">
+<img src="assets/screenshots/GoalScreen.png" width="180">
 
----
+</div>
+
+<div align="center">
+
+<img src="assets/screenshots/InsightsScreen.png" width="180">
+<img src="assets/screenshots/AICoachScreen.png" width="180">
+<img src="assets/screenshots/TransactionScreen.png" width="180">
+
+</div>
+
 
 # 🛠 Tech Stack
 
@@ -178,3 +185,4 @@ Computer Engineer • Backend Developer • AI Enthusiast
 ---
 
 ⭐ If you like this project, don't forget to give it a star.
+
