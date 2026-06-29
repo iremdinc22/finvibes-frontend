@@ -53,13 +53,13 @@ function BottomTabs({ navigation }: any) {
       })}
     >
       <Tab.Screen name="Home">
-        {() => (
+        {({ navigation: tabNavigation }) => (
           <HomeScreen
             onAddExpensePress={() => navigation.navigate("AddExpense")}
             onProfilePress={() => navigation.navigate("Profile")}
             onSettingsPress={() => navigation.navigate("Settings")}
             onNotificationsPress={() => navigation.navigate("Notifications")}
-            onInsightsPress={() => navigation.navigate("Insights")}
+            onInsightsPress={() => tabNavigation.navigate("Insights")}
             onBudgetPress={() => navigation.navigate("Budget")}
           />
         )}
